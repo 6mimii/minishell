@@ -37,6 +37,15 @@ typedef struct s_msh
     struct s_token  *tokens;
     char            *line;
     int             parse_error;
+	struct s_env	*env;
 }       t_msh;
+
+typedef struct s_env
+{
+	char			*type;
+	char			*content;
+	struct s_env	*next;
+}		t_env;
+
 
 #endif
