@@ -14,9 +14,9 @@ static void init_env_lst(t_env **lst, char  **envp) // lista donde guardaremos l
 		new = malloc(sizeof(t_env));
 		if (!new)
 			return ;
-		while (envp[i][x] != 'x')
+		while (envp[i][x] != '=')
 			x++;
-		new->type = "USER";
+		new->type = ft_substr(envp[i], 0, x);
 		j = ++x;
 		while(envp[i][j])
 			j++;

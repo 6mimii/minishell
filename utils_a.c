@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_1.c                                          :+:      :+:    :+:   */
+/*   utils_a.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohamed-doudi-baltit <mohamed-doudi-bal    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:22:03 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2024/10/24 00:11:55 by mohamed-dou      ###   ########.fr       */
+/*   Updated: 2025/02/04 16:02:30 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char *my_strtok(char *str, const char *delim)
     return token;
 }
 
-int main() {
+/* int main() {
     char str[] = "ls -l || grep .c > output.txt";
     char *delim = " ";
     char *token = my_strtok(str, delim);
@@ -88,5 +88,5 @@ int main() {
         token = my_strtok(NULL, delim);
     }
     return 0;
-}
+} */
 
