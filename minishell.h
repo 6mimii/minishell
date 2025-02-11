@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
+/*   Updated: 2025/02/11 15:47:18 by fsaffiri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 #define MINISHELL_H
 #include <stdio.h>
@@ -6,6 +18,17 @@
 #include <limits.h>
 #include <string.h>
 
+/* COLOR */
+#define RST                     "\033[0m"    // Reset per tornare al colore normale
+#define RED                     "\033[1;31m" // Rosso brillante
+#define GRN                     "\033[1;32m" // Verde brillante
+#define YLW                     "\033[1;33m" // Giallo brillante
+#define BLU                     "\033[1;34m" // Blu brillante
+#define MGT                     "\033[1;35m" // Magenta brillante
+#define CYN                     "\033[1;36m" // Ciano brillante
+#define WIT                     "\033[1;37m" // Bianco brillante
+
+/* ERROR */
 #define     UNEXPECTED_TOK "sintax error near unexpected token"
 #define     UNEXPECTED_EOF "syntax error unexpected end of file"
 #define     WRONG_Q "unexpected EOF while looking for matching `''"
@@ -78,4 +101,5 @@ void	create_token_lst(t_token **tok, int type, char *content, int flag);
 
 t_env	*env_lst(char **envp);
 static void init_env_lst(t_env **lst, char  **envp);
+
 #endif
