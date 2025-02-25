@@ -6,4 +6,5 @@ int main (int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	init_msh(envp, &msh);
+	get_input(&msh);
 }

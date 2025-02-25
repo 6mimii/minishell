@@ -11,7 +11,18 @@ void get_input(t_msh *msh)
 	msh->input = readline("Mimishell% ");
 	if (!msh->input)
 		crtl_d();
-	else
-		add_history(msh->input);
-		msh->tokens = set_tokens;
+	while (msh->input)
+	{
+		if (msh->input[0] == '\0')
+			free(msh->input);
+		else
+		{
+			add_history(msh->input);
+			msh->tokens = set_tokens(msh->input, msh);
+		}
+		msh->input = readline("Mimishell% ");
+		if(!msh->input)
+			ctrl_d();
+	}
+	free_msh(msh);
 }

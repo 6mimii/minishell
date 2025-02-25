@@ -26,7 +26,7 @@ static void init_env_lst(t_env **lst, char  **envp) // lista donde guardaremos l
 	}
 }
 
-t_env	*env_lst(char **envp)
+t_env	*enviroment_lst(char **envp)
 {
 	t_env	*env;
 	

@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 #define     UNEXPECTED_TOK "sintax error near unexpected token"
 #define     UNEXPECTED_EOF "syntax error unexpected end of file"
@@ -48,9 +50,8 @@ typedef struct s_env
 	struct s_env	*next;
 }		t_env;
 
-
-
 void init_msh(char **envp, t_msh *msh);
+t_env	*enviroment_lst(char **envp);
 void get_input(t_msh *msh);
 
 /////////////TOKENIZADOR//////////////
@@ -71,11 +72,11 @@ char	*my_strtok(char *str, const char *delim);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 /////////////NODES//////////////
-void add_node_back(t_token **lst, t_token *new);
-t_token new_node(t_token **content, int type, int flag);
-void	create_token_lst(t_token **tok, int type, char *content, int flag);
+void		add_node_back(t_token **lst, t_token *new);
+t_token 	new_node(t_token **content, int type, int flag);
+void		create_token_lst(t_token **tok, int type, char *content, int flag);
 
-
+/////////////ENVIRONMENT//////////////
 t_env	*env_lst(char **envp);
 static void init_env_lst(t_env **lst, char  **envp);
 #endif
