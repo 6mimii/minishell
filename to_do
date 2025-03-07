@@ -1,0 +1,37 @@
+Allora l'idea sarebbe quella rpima di fare l'executore,
+e poi guardare la parte fatta del parsing e migliorarla per combinare le due
+in maniera che funzionino perfettamente.
+Quindi iniziando facendo la mia parte direi che possiamo iniziare facendo una macro todo list
+che poi verra espansa in goni foglio di testo dove farò le mie varie considerazioni rispetto
+a le cose che devo fare.
+
+Come funziona uno shell in maniera basica:
+1 - Reads its input from a file (see Shell Scripts), from a string supplied as an argument to the -c invocation option (see Invoking Bash), or from the user’s terminal.
+2 - Breaks the input into words and operators, obeying the quoting rules described in Quoting. These tokens are separated by metacharacters.
+	Alias expansion is performed by this step (see Aliases).
+3 - Parses the tokens into simple and compound commands (see Shell Commands).
+4 - Performs the various shell expansions (see Shell Expansions), breaking the expanded tokens into lists of filenames (see Filename Expansion) and commands and arguments.
+5 - Performs any necessary redirections (see Redirections) and removes the redirection operators and their operands from the argument list.
+6 - Executes the command (see Executing Commands).
+7 - Optionally waits for the command to complete and collects its exit status (see Exit Status).
+
+1 - Studio
+	Con studio si intende comprensione del funzionamento di una shell,
+	ed ovviamente anche di bash e tutto ciò che la circonda.
+	Come seconda cosa direi che bisogna riguardarsi i signal e invece
+	studiare le pipes in modo da implementarle in maniera corretta e senza errori.
+	successivamente direi che possiamo iniziare con la stesura del exe:
+
+---> Guide e Documentazione
+📄 Guida su Bash e Shell Scripting → https://www.gnu.org/software/bash/manual/bash.html
+📄 The Linux Programming Interface (Libro avanzato) → https://man7.org/tlpi/
+📄 Beej's Guide to Unix IPC (Inter-process communication) → https://beej.us/guide/bgipc/html/
+---> Video Tutorial
+🎥 Crash Course sulla Shell → https://www.youtube.com/watch?v=tK9Oc6AEnR4
+🎥 Fork e Exec spiegati (creazione di processi in C) → https://www.youtube.com/watch?v=8XBpUr9S0uk
+---> Esercizi Pratici
+💻 Scrivi la tua shell (Tutorial step-by-step) → https://brennan.io/2020/01/16/write-a-shell/
+💻 Minishell Project (Esempio da 42 School) → https://github.com/Matthieu-Hernandez/Minishell
+
+2 - Iniziare a scrivere l'exe:
+	todo

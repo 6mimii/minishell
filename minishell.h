@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/02/11 15:47:18 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:44:38 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,24 @@ typedef struct s_token
     
 }       t_token;
 
+typedef struct s_cmd
+{
+    char			argv;
+    int				error;
+    int				fd_in;
+    int				fd_out;
+    int				index;
+    struct s_cmd    *next;
+}    t_cmd;
+
 typedef struct s_msh
 {
-    struct s_token  *tokens;
     char            *input;
 	char			**envp;
+    int				parse_error;
+    struct s_token  *tokens;
 	struct s_env	*env;
-	int				parse_error;
+    struct s_cmd    *cmd;
 }       t_msh;
 
 typedef struct s_env
