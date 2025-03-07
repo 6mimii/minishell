@@ -30,6 +30,8 @@ typedef struct s_token
     t_token_type    type;
     char            *content;
     int             flag;
+	int				exp;
+	int				backslash;
     struct s_token  *next;
     
 }       t_token;
@@ -41,6 +43,9 @@ typedef struct s_msh
 	char			**envp;
 	struct s_env	*env;
 	int				parse_error;
+	struct s_cmd	*cmd;
+	struct s_token	*tokens;
+	struct s_env	*env;
 }       t_msh;
 
 typedef struct s_env
@@ -70,6 +75,9 @@ int		ft_strcmp(char *s1, char *s2);
 char	*ft_strchr(const char *s, int c);
 char	*my_strtok(char *str, const char *delim);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strdup(const char *s1);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dst_size);
+size_t	ft_strlen(const char *s);
 
 /////////////NODES//////////////
 void		add_node_back(t_token **lst, t_token *new);
@@ -79,4 +87,13 @@ void		create_token_lst(t_token **tok, int type, char *content, int flag);
 /////////////ENVIRONMENT//////////////
 t_env	*env_lst(char **envp);
 static void init_env_lst(t_env **lst, char  **envp);
+
+////////////////FLAGS/////////////////
+void expand_flag(t_token *tok);
+
+////////////////EXPAND/////////////////
+char	*no_expand_var(char *s1, int *i);
+void	expand_content(t_token *tok, t_msh *msh);
+void	expand_tokens(t_token **tokens, t_msh *msh);
+
 #endif

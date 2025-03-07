@@ -22,7 +22,7 @@ static void init_env_lst(t_env **lst, char  **envp) // lista donde guardaremos l
 			j++;
 		new->content = ft_substr(envp[i], x, (j - x));
 		new->next = NULL;
-		add_back((t_token **)lst, (t_token *)new);
+		add_node_back((t_token **)lst, (t_token *)new);
 	}
 }
 
