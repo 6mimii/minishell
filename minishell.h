@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/03/07 12:44:38 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:53:25 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ typedef struct s_cmd
 
 typedef struct s_msh
 {
+    int             cmd_len;
     char            *input;
 	char			**envp;
+    char            **path;
     int				parse_error;
     struct s_token  *tokens;
 	struct s_env	*env;
@@ -82,7 +84,7 @@ typedef struct s_env
 	struct s_env	*next;
 }		t_env;
 
-
+extern int	g_signal;
 
 void init_msh(char **envp, t_msh *msh);
 void get_input(t_msh *msh);
