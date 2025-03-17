@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/03/07 13:53:25 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/03/17 17:35:19 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,13 @@ void	create_token_lst(t_token **tok, int type, char *content, int flag);
 
 t_env	*env_lst(char **envp);
 static void init_env_lst(t_env **lst, char  **envp);
+
+/* Executor */
+void	executor(t_msh *msh);
+
+/* Utils */
+char	**get_path(void);
+void	set_cmd_ind(t_cmd *cmd);
+
 
 #endif

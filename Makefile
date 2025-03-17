@@ -20,6 +20,16 @@ src/parseo/nodes.c \
 src/parseo/enviroment.c \
 src/parseo/commands.c \
 src/executor/executor.c \
+src/executor/cd.c \
+src/executor/echo.c \
+src/executor/env.c \
+src/executor/exit.c \
+src/executor/export.c \
+src/executor/multiple_cmd.c \
+src/executor/pwd.c \
+src/executor/single_cmd.c \
+src/executor/unset.c \
+src/executor/utils.c \
 
 CC = clang
 
