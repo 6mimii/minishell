@@ -25,6 +25,16 @@ typedef enum e_token_type
     T_DQ,
 }   t_token_type;
 
+
+typedef struct s_commands
+{
+	char			**argv;
+	int				error;
+	int				fd_in;
+	int				fd_out;
+	struct s_cmd	*next;
+}	t_command;
+
 typedef struct s_token
 {
     t_token_type    type;
@@ -41,8 +51,11 @@ typedef struct s_msh
     struct s_token  *tokens;
     char            *input;
 	char			**envp;
+	char			**path;
 	struct s_env	*env;
 	int				parse_error;
+	int				cmd_len;
+	int				state;
 	struct s_cmd	*cmd;
 	struct s_token	*tokens;
 	struct s_env	*env;

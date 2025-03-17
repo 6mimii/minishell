@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:47:18 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/03/07 15:57:20 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/03/13 15:27:04 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,22 @@ static void	free_tokens(t_token **tokens)
 	*tokens = NULL;
 }
 
+void	free_matrix(char **matrix)
+{
+	int i;
+	i = 0;
+	
+	while(matrix[i])
+		free(matrix[i++]);
+	free(matrix);
+	matrix = NULL;
+}
+
+void	free_cmds(t_cmd **cmd)
+{
+	
+}
+
 void	free_msh(t_msh *msh)
 {
 	if (msh->tokens)
@@ -41,8 +57,11 @@ void	free_msh(t_msh *msh)
 	}
 	if (msh->path)
 	{
-		free
+		free_matrix(msh->path);
+		msh->path = NULL;
 	}
+	msh->cmd_len = 0;
+	msh->parse_error = 0;
 		
 }
 void	free_env(t_env *env)

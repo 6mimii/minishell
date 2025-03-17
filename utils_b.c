@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:13:09 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/03/07 17:10:06 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/03/17 12:50:32 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,15 @@ char *ft_strdup(const char *s1)
 		return (NULL);
 	ft_strlcpy(str, s1, ft_strlen(s1) + 1);
 	return (str);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	int i;
+	i = 0;
+	while (s[i])
+	{
+		write(fd, &s[i], 1);
+		i++;
+	}
 }
