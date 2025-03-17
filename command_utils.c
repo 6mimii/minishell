@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:20:37 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/03/17 12:40:20 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:40:22 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_command	*new_node_cmd(void)
 	return (new);
 }
 
-void	create_command_list (t_command **cmd, t_command *new)
+void	create_command_list(t_command **cmd, t_command *new)
 {
 	if (!*cmd)
 		*cmd = new;

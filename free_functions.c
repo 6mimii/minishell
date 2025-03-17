@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:47:18 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/03/13 15:27:04 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:48:17 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,28 @@ void	free_matrix(char **matrix)
 	matrix = NULL;
 }
 
-void	free_cmds(t_cmd **cmd)
+void	free_commands(t_command **cmd)
 {
+	t_command	*aux;
 	
+	if (!*cmd || !cmd)
+		return ;
+	while (*cmd)
+	{
+		aux = (*cmd)->next;
+		if((*cmd)->fd_in > 2)
+		{
+			if (access(".here_doc.tmp", F_OK) == 0)
+				unlink(".here_doc.tmp");
+			close ((*cmd)->fd_in);
+		}
+		if((*cmd)->fd_out > 2)
+			close((*cmd)->fd_out);
+		free_matrix((*cmd)->argv);
+		free(*cmd);
+		*cmd = aux;
+	}
+	*cmd = NULL;
 }
 
 void	free_msh(t_msh *msh)
