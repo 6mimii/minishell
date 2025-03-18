@@ -85,9 +85,7 @@ typedef struct s_msh
     char            *input;
 	char			**envp;
 	char			**path;
-	struct s_env	*env;
 	int				parse_error;
-	int				cmd_len;
 	int				state;
 	struct s_cmd	*cmd;
 	struct s_token	*tokens;
@@ -109,7 +107,7 @@ void get_input(t_msh *msh);
 
 /////////////TOKENIZADOR//////////////
 t_token			*set_tokens(char *line, t_msh *msh);
-static void		set_backslash_token(char *line, int *i, t_token **tokens, int flag);
+void	    	set_backslash_token(char *line, int *i, t_token **tokens, int flag);
 void			set_word_token(char *line, int *i, t_token **tokens);
 void    		set_greather_token(char *line, int *i, t_token **tokens);
 void    		set_lower_token(char *line, int *i, t_token **tokens);
@@ -134,7 +132,7 @@ void		create_token_lst(t_token **tok, int type, char *content, int flag);
 
 /////////////ENVIRONMENT//////////////
 t_env	*env_lst(char **envp);
-static void init_env_lst(t_env **lst, char  **envp);
+void    init_env_lst(t_env **lst, char  **envp);
 
 ////////////////FLAGS/////////////////
 void expand_flag(t_token *tok);
