@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
+/*   Updated: 2025/03/17 17:35:19 by fsaffiri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 #define MINISHELL_H
 #include <stdio.h>
@@ -8,6 +20,17 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+/* COLOR */
+#define RST                     "\033[0m"    // Reset per tornare al colore normale
+#define RED                     "\033[1;31m" // Rosso brillante
+#define GRN                     "\033[1;32m" // Verde brillante
+#define YLW                     "\033[1;33m" // Giallo brillante
+#define BLU                     "\033[1;34m" // Blu brillante
+#define MGT                     "\033[1;35m" // Magenta brillante
+#define CYN                     "\033[1;36m" // Ciano brillante
+#define WIT                     "\033[1;37m" // Bianco brillante
+
+/* ERROR */
 #define     UNEXPECTED_TOK "sintax error near unexpected token"
 #define     UNEXPECTED_EOF "syntax error unexpected end of file"
 #define     WRONG_Q "unexpected EOF while looking for matching `''"
@@ -46,9 +69,19 @@ typedef struct s_token
     
 }       t_token;
 
+typedef struct s_cmd
+{
+    char			argv;
+    int				error;
+    int				fd_in;
+    int				fd_out;
+    int				index;
+    struct s_cmd    *next;
+}    t_cmd;
+
 typedef struct s_msh
 {
-    struct s_token  *tokens;
+    int             cmd_len;
     char            *input;
 	char			**envp;
 	char			**path;
@@ -67,6 +100,8 @@ typedef struct s_env
 	char			*content;
 	struct s_env	*next;
 }		t_env;
+
+extern int	g_signal;
 
 void init_msh(char **envp, t_msh *msh);
 t_env	*enviroment_lst(char **envp);
@@ -108,5 +143,12 @@ void expand_flag(t_token *tok);
 char	*no_expand_var(char *s1, int *i);
 void	expand_content(t_token *tok, t_msh *msh);
 void	expand_tokens(t_token **tokens, t_msh *msh);
+/* Executor */
+void	executor(t_msh *msh);
+
+/* Utils */
+char	**get_path(void);
+void	set_cmd_ind(t_cmd *cmd);
+
 
 #endif
