@@ -6,11 +6,30 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:45:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/03/17 17:25:46 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:49:22 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		is_builtin(t_msh *msh, t_cmd *cmd) // TODO, manca tutta la parte seria
+{
+	if (ft_strcmp(cmd->argv[0], "cd") == 0)
+		return (ft_cd(msh, cmd), 0);
+	else if (ft_strcmp(cmd->argv[0], "echo") == 0)
+		return (ft_echo(msh, cmd), 0);
+	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
+		return (ft_exit(msh, cmd), 0);
+	else if (ft_strcmp(cmd->argv[0], "export") == 0)
+		return (ft_export(msh, cmd), 0);
+	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
+		return (ft_pwd(msh, cmd), 0);
+	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
+		return (ft_unset(msh, cmd), 0);
+	else if (ft_strcmp(cmd->argv[0], "env") == 0)
+		return (ft_env(msh, cmd), 0);
+	return (1);
+}
 
 void	executor(t_msh *msh)
 {

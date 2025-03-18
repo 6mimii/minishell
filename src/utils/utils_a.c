@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_a.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:22:03 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/02/04 16:02:30 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:17:19 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,3 @@ char *my_strtok(char *str, const char *delim)
     }
     return token;
 }
-
-/* int main() {
-    char str[] = "ls -l || grep .c > output.txt";
-    char *delim = " ";
-    char *token = my_strtok(str, delim);
-    
-    while (token != NULL) {
-        printf("Token: %s\n", token);
-        token = my_strtok(NULL, delim);
-    }
-    return 0;
-} */
-

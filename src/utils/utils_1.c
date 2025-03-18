@@ -1,16 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:47:53 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/03/17 17:25:18 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:26:02 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	safe_fork(pid_t *pid)
+{
+	*pid = fork();
+	if (*pid < 0)
+		return (error_handl("Fork error"));
+}
 
 void	set_cmd_ind(t_cmd *cmd)
 {
