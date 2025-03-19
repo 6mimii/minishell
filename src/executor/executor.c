@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:45:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/03/18 17:49:22 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:25:29 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,7 @@ void	executor(t_msh *msh)
 	g_signal = 0;
 	dup2(fd[0], 0);
 	dup2(fd[1], 1);
-	init_signals(msh);	
+	close(fd[0]);
+	close(fd[1]);
+	init_signals(msh);
 }

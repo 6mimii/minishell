@@ -6,7 +6,8 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:48:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/03/07 12:48:07 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:25:57 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
