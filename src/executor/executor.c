@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:45:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/03/19 17:25:29 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/02 12:30:21 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		is_builtin(t_msh *msh, t_cmd *cmd) // TODO, manca tutta la parte seria
 	if (ft_strcmp(cmd->argv[0], "cd") == 0)
 		return (ft_cd(msh, cmd), 0);
 	else if (ft_strcmp(cmd->argv[0], "echo") == 0)
-		return (ft_echo(msh, cmd), 0);
+		return (ft_echo(msh, cmd, cmd->fd_out), 0);
 	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
 		return (ft_exit(msh, cmd), 0);
 	else if (ft_strcmp(cmd->argv[0], "export") == 0)

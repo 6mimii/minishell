@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/03/19 17:33:00 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/02 12:29:35 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct	s_cmd
 typedef struct	s_msh
 {
     int				cmd_len;
+	int				state;
     char			*input;
 	char			**envp;
     char			**path;
@@ -125,5 +126,9 @@ char			**get_path(void);
 void			set_cmd_ind(t_cmd *cmd);
 void			error_handl(const char *s);
 void			safe_fork(pid_t *pid);
+
+/* Builts in */
+void			ft_pwd(t_msh *msh, t_cmd *cmd);
+void			ft_echo(t_msh *msh, t_cmd *cmd, int fd);
 
 #endif
