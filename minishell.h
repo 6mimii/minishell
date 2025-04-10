@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/02 12:29:35 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/10 17:12:38 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <limits.h>
 # include <string.h>
 # include <sys/types.h>
+# include <stdbool.h>
 
 /* COLOR */
 # define RST					"\033[0m"    // Reset per tornare al colore normale
