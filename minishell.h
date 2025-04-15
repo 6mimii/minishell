@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/10 17:12:38 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:04:34 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void			one_cmd_handl(t_msh *msh);
 int				is_builtin(t_msh *msh, t_cmd *cmd);
 
 /* Utils */
-char			**get_path(void);
+char			**get_path(t_msh *msh);
 void			set_cmd_ind(t_cmd *cmd);
 void			error_handl(const char *s);
 void			safe_fork(pid_t *pid);
@@ -131,5 +131,11 @@ void			safe_fork(pid_t *pid);
 /* Builts in */
 void			ft_pwd(t_msh *msh, t_cmd *cmd);
 void			ft_echo(t_msh *msh, t_cmd *cmd, int fd);
+
+/* Errors */
+void			free_and_exit(char *msg, t_msh *msh, int state, bool print);
+void			error_and_exit(char *name, int state, t_msh *msh);
+void			error_files(char *name, char *msg);
+void			error_msh(char *msg, t_msh *msh, int state);
 
 #endif

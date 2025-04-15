@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:47:53 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/03/18 17:26:02 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:50:59 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	set_cmd_ind(t_cmd *cmd)
 	}
 }
 
-char	**get_path(void)
+char	**get_path(t_msh *msh)
 {
 	char	*path_env;
 	char	**paths;

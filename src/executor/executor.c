@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:45:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/02 12:30:21 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:51:52 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,25 @@ int		is_builtin(t_msh *msh, t_cmd *cmd) // TODO, manca tutta la parte seria
 
 void	executor(t_msh *msh)
 {
-	int	fd[2];
 	int	fd_in;
+    int	saved_stdin;
+    int	saved_stdout;
 	
-	g_signal = 1;
-	fd[0] = dup(0);
-	fd[1] = dup(1);
-	set_cmd_ind(msh->cmd); // FATTO set command index
+	saved_stdin = dup(STDIN_FILENO);
+    saved_stdout = dup(STDOUT_FILENO);
+    set_cmd_ind(msh->cmd);
 	fd_in = msh->cmd->fd_in;
-	msh->path = get_path(); // FATTO	get_path
-	init_signals(msh); // TODO initialisaition of the signals
-	if (msh->cmd_len == 1)
-		one_cmd_handl(msh); // TODO
-	else
-		multiple_cmds(msh, fd_in); // TODO
-	g_signal = 0;
-	dup2(fd[0], 0);
-	dup2(fd[1], 1);
-	close(fd[0]);
-	close(fd[1]);
-	init_signals(msh);
+    msh->path = get_path(msh);
+    setup_signals(msh); // TODO
+    g_signal = 1;
+    if (msh->cmd_len == 1)
+		one_cmd_handl(msh);
+    else
+		multiple_cmds(msh, fd_in);
+    g_signal = 0;
+    dup2(saved_stdin, STDIN_FILENO);
+    dup2(saved_stdout, STDOUT_FILENO);
+    close(saved_stdin);
+    close(saved_stdout);
+    setup_signals(msh); // TODO
 }
