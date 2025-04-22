@@ -75,3 +75,22 @@ int	command_content(t_command *new, t_token *tok)
 	new->argv[i] = NULL;
 	return(1);
 }
+
+int command_len(t_token *tok)
+{
+	int		i;
+	t_token	*aux;
+
+	aux = tok;
+	i = 0;
+	while (aux && aux->type != T_PIPE)
+	{
+		if (aux->type == T_G || aux->type == T_DG
+			|| aux ->type == T_L || aux->type = T_DL)
+			aux = aux->next;
+		else
+			i++;
+		aux = aux->next;
+	}
+	return (i);
+}

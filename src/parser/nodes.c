@@ -19,9 +19,8 @@ void add_node_back(t_token **lst, t_token *new)
 	if (*lst == NULL)
 	{
 		*lst = new;
-		return ;
+		return;
 	}
-
 	new_node = *lst;
 	while (new_node->next != NULL)
 		new_node = new_node->next;

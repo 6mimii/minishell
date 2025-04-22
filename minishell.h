@@ -101,9 +101,9 @@ typedef struct s_env
 
 extern int	g_signal;
 
-void init_msh(char **envp, t_msh *msh);
+void    init_msh(char **envp, t_msh *msh);
 t_env	*enviroment_lst(char **envp);
-void get_input(t_msh *msh);
+void    get_input(t_msh *msh);
 
 /////////////TOKENIZADOR//////////////
 t_token			*set_tokens(char *line, t_msh *msh);
