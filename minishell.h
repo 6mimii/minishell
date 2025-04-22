@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/15 18:04:34 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:47:12 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <string.h>
 # include <sys/types.h>
 # include <stdbool.h>
+# include <errno.h>
 
 /* COLOR */
 # define RST					"\033[0m"    // Reset per tornare al colore normale
@@ -35,6 +36,7 @@
 # define	UNEXPECTED_EOF "syntax error unexpected end of file"
 # define	WRONG_Q "unexpected EOF while looking for matching `''"
 # define	WRONG_DQ "unexpected EOF while looking for matching `\"'"
+# define	EXPORT "export: not a valid identifier"
 
 typedef enum	e_token_type
 {
