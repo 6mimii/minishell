@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:48:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/22 12:44:51 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:50:54 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	cd_errors(t_msh *msh, char *path)
 	}
 }
 
-int static	chdir_handle(t_msh *msh, t_cmd *cmd)
+static int	chdir_handle(t_msh *msh, t_cmd *cmd)
 {
 	if (cmd_argc(cmd) > 2)
 		error_msh("cd: too many arguments", msh, 1);

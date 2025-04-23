@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:47:53 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/15 17:50:59 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:56:06 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,17 @@ char	**get_path(t_msh *msh)
 		return (NULL);
 	paths = ft_split(path_env, ':');
 	return (paths);
+}
+
+void	wait_handler(t_msh *msh, pid_t pid)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		msh->state = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		msh->state = 128 + WTERMSIG(status);
+	else
+		msh->state = 1;
 }

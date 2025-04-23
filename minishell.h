@@ -6,7 +6,7 @@
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/22 12:47:12 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:54:38 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct	s_env
 {
 	char			*type;
 	char			*content;
+	int				index;
 	struct s_env	*next;
 }				t_env;
 
@@ -120,24 +121,44 @@ t_env			*env_lst(char **envp);
 static void		init_env_lst(t_env **lst, char  **envp);
 
 /* Executor */
-void			executor(t_msh *msh);
-void			one_cmd_handl(t_msh *msh);
-int				is_builtin(t_msh *msh, t_cmd *cmd);
 
-/* Utils */
-char			**get_path(t_msh *msh);
-void			set_cmd_ind(t_cmd *cmd);
-void			error_handl(const char *s);
-void			safe_fork(pid_t *pid);
+void			executor(t_msh *msh);
+void			set_env(t_msh *msh, char *var, char *new);
+void			add_env(t_msh *msh, char *var, char *content);
+char			*get_env(t_msh *msh, char *var);
+char			*get_env_type(t_msh *msh, char *var);
+void			print_export(t_env *env, int fd);
 
 /* Builts in */
-void			ft_pwd(t_msh *msh, t_cmd *cmd);
+
+int				is_builtin(t_msh *msh, t_cmd *cmd);
+void			ft_env(t_msh *msh, t_cmd *cmd, char *next);
 void			ft_echo(t_msh *msh, t_cmd *cmd, int fd);
+void			ft_pwd(t_msh *msh, t_cmd *cmd);
+void			ft_exit(t_msh *msh, t_cmd *cmd);
+void			ft_cd(t_msh *msh, t_cmd *cmd);
+void			ft_export(t_msh *msh, t_cmd *cmd);
+void			ft_unset(t_msh *msh, t_cmd *cmd);
+
+/* One command */
+
+void			handle_single_command(t_msh *msh);
+void			run_external_command(t_msh *msh, t_cmd *cmd, char **paths);
+char			*find_cmd(char **path, char *cmd, t_msh *msh);
+
+/* Multiple cmd */
+
+void			multiple_cmds(t_msh *msh, int fd_in);
+
+/* Utils */
+
+char			**get_path(t_msh *msh);
+void			wait_handler(t_msh *msh, pid_t pid);
 
 /* Errors */
-void			free_and_exit(char *msg, t_msh *msh, int state, bool print);
-void			error_and_exit(char *name, int state, t_msh *msh);
-void			error_files(char *name, char *msg);
 void			error_msh(char *msg, t_msh *msh, int state);
+void			error_files(char *name, char *msg);
+void			error_and_exit(char *name, int state, t_msh *msh);
+void			free_and_exit(char *msg, t_msh *msh, int state, bool print);
 
 #endif
