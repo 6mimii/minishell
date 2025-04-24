@@ -1,16 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:47:53 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/03/17 17:25:18 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:56:06 by fsaffiri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	safe_fork(pid_t *pid)
+{
+	*pid = fork();
+	if (*pid < 0)
+		return (error_handl("Fork error"));
+}
 
 void	set_cmd_ind(t_cmd *cmd)
 {
@@ -27,7 +34,7 @@ void	set_cmd_ind(t_cmd *cmd)
 	}
 }
 
-char	**get_path(void)
+char	**get_path(t_msh *msh)
 {
 	char	*path_env;
 	char	**paths;
@@ -37,4 +44,17 @@ char	**get_path(void)
 		return (NULL);
 	paths = ft_split(path_env, ':');
 	return (paths);
+}
+
+void	wait_handler(t_msh *msh, pid_t pid)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		msh->state = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		msh->state = 128 + WTERMSIG(status);
+	else
+		msh->state = 1;
 }

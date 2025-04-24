@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:22:03 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/03/17 12:52:10 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:34:27 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char *my_strtok(char *str, const char *delim)
         next++;
     if (!*next)
         return NULL;
-    if (ft_strchr("|><", *next)) // manejar >> y <<, las "grep ls -l " y ' '
+    if (ft_strchr("|><", *next))
     {
         token = next;
         next++;
@@ -83,16 +83,3 @@ void	ft_putendl_fd(char *s, int fd)
 	ft_putstr_fd(s, fd);
 	write(fd, "\n", 1);
 }
-
-/* int main() {
-    char str[] = "ls -l || grep .c > output.txt";
-    char *delim = " ";
-    char *token = my_strtok(str, delim);
-    
-    while (token != NULL) {
-        printf("Token: %s\n", token);
-        token = my_strtok(NULL, delim);
-    }
-    return 0;
-} */
-

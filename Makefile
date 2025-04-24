@@ -12,8 +12,6 @@ OBJ_DIR = obj
 
 FILES = src/main.c \
 src/parseo/init.c \
-src/parseo/utils_a.c \
-src/parseo/utils_b.c \
 src/parseo/tokens.c \
 src/parseo/set_tokens.c \
 src/parseo/nodes.c \
@@ -29,7 +27,10 @@ src/executor/multiple_cmd.c \
 src/executor/pwd.c \
 src/executor/single_cmd.c \
 src/executor/unset.c \
-src/executor/utils.c \
+src/utils/utils_1.c \
+src/utils/utils_a.c \
+src/utils/utils_b.c \
+src/utils/error.c \
 
 CC = clang
 
