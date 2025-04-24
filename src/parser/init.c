@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:47 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/02/11 15:30:48 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:49:55 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int clean_tokens (t_msh *msh)
 		return (0);
 	expand_flag(msh->tokens);
 	expand_tokens(&msh->tokens, msh);
-	
+	return (1); // terminar
 }
 
 void init_msh(char **envp, t_msh *msh)
@@ -31,7 +31,8 @@ void get_input(t_msh *msh)
 {
 	msh->input = readline("Mimishell% ");
 	if (!msh->input)
-		crtl_d();
+	 ;
+	// ctrl_d();
 	while (msh->input)
 	{
 		if (msh->input[0] == '\0')
@@ -47,7 +48,8 @@ void get_input(t_msh *msh)
 		}
 		msh->input = readline("Mimishell% ");
 		if(!msh->input)
-			ctrl_d();
+			; 
+		// ctrl_d();
 	}
-	free_msh(msh);
+	// free_msh(msh);
 }

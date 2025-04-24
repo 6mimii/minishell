@@ -11,12 +11,12 @@ SRCS_DIR = src
 OBJ_DIR = obj
 
 FILES = src/main.c \
-src/parseo/init.c \
-src/parseo/tokens.c \
-src/parseo/set_tokens.c \
-src/parseo/nodes.c \
-src/parseo/enviroment.c \
-src/parseo/commands.c \
+src/parser/init.c \
+src/parser/tokens.c \
+src/parser/set_tokens.c \
+src/parser/nodes.c \
+src/parser/enviroment.c \
+src/parser/commands.c \
 src/executor/executor.c \
 src/executor/cd.c \
 src/executor/echo.c \

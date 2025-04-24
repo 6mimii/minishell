@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohamed-doudi-baltit <mohamed-doudi-bal    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 15:19:43 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2024/10/24 00:07:35 by mohamed-dou      ###   ########.fr       */
+/*   Updated: 2025/04/24 17:54:27 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void    set_double_quote_token(char *line, int *i, t_token **tokens, t_msh *msh)
 {
@@ -28,8 +28,7 @@ void    set_double_quote_token(char *line, int *i, t_token **tokens, t_msh *msh)
             *i += 1;
         if (line[*i] == '\"')
         {
-            create_token_lst(tokens, T_DQ, ft_strdup(line, start,
-                (*i - start)), flag);
+            create_token_lst(tokens, T_DQ, ft_substr(line, start, (*i - start)), flag);
             *i += 1;
         }
         else
@@ -97,12 +96,12 @@ void    set_greather_token(char *line, int *i, t_token **tokens)
 	{
 		if (line[*i + 1] == '>')
 		{
-			create_tok_lst(tokens, T_DG, ft_strdup(">>"), 0);
+			create_token_lst(tokens, T_DG, ft_strdup(">>"), 0);
 			*i += 2;
 		}
 		else
 		{
-			create_tok_lst(tokens, T_G, ft_strdup(">"), 0);
+			create_token_lst(tokens, T_G, ft_strdup(">"), 0);
 			*i += 1;
 		}
 	}

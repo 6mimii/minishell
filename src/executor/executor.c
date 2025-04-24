@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:45:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/23 16:55:54 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:02:47 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	executor(t_msh *msh)
     setup_signals(msh);
     g_signal = 1;
     if (msh->cmd_len == 1)
-		one_cmd_handl(msh);
+		handle_single_command(msh);
     else
 		multiple_cmds(msh, fd_in);
     g_signal = 0;

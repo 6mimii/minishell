@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/24 17:32:11 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:02:01 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <sys/types.h>
 # include <stdbool.h>
 # include <errno.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 /* COLOR */
 # define RST					"\033[0m"    // Reset per tornare al colore normale
@@ -79,7 +81,6 @@ typedef struct	s_msh
 	char			**envp;
 	char			**path;
 	int				parse_error;
-	int				state;
 	struct s_cmd	*cmd;
 	struct s_token	*tokens;
 	struct s_env	*env;
@@ -168,6 +169,7 @@ void			multiple_cmds(t_msh *msh, int fd_in);
 /* Utils */
 
 char			**get_path(t_msh *msh);
+void	set_cmd_ind(t_cmd *cmd);
 void			wait_handler(t_msh *msh, pid_t pid);
 
 /* Errors */

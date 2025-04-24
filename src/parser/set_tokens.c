@@ -6,11 +6,11 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 19:11:58 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/02/10 17:39:41 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:57:48 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static void set_backslash_token(char *input, int *i, t_token **tokens, int flag)
 {
@@ -24,7 +24,7 @@ static void set_backslash_token(char *input, int *i, t_token **tokens, int flag)
             start--;
         if (input[*i + 1] && input[*i + 1] == '~') // si es esto, se avanza
             *i += 1;
-        create_token_lst(tokens, T_WORD, ft_substr (input, start, (*i + 1 - start)), flag);   
+        create_token_lst(tokens, T_WORD, ft_substr(input, start, (*i + 1 - start)), flag);   
     }
     else
         create_token_lst(tokens, T_WORD, ft_subdup(""), 2); // crea un token vacio
