@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:42:47 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/03/07 17:29:52 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:31:50 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-char	*no_expand_var(char *s1, int *i)
+char	*get_noexp_var(char *s1, int *i)
 {
 	char	*line;
 	int		len;
@@ -21,7 +21,7 @@ char	*no_expand_var(char *s1, int *i)
 	len = 1;
 	*i += 1;
 	j = *i + 1;
-	while(s1[j] && s1[j] != '$' && s1[j] != '\\')
+	while (s1[j] && s1[j] != '$' && s1[j] != '\\')
 	{
 		j++;
 		len++;
@@ -43,7 +43,7 @@ char	*no_expand_var(char *s1, int *i)
 
 void	expand_content(t_token *tok, t_msh *msh)
 {
-	int 	i;
+	int		i;
 	char	*line;
 	char	*aux;
 
@@ -52,21 +52,82 @@ void	expand_content(t_token *tok, t_msh *msh)
 	while (tok->content[i])
 	{
 		if (tok->content[i] == '\\')
-			aux = no_expand_var(tok->content, &i);
+			aux = get_noexp_var(tok->content, &i);
+		else if (tok->content[i] == '$' && tok->content[i + 1] == '~')
+		{
+			aux = ft_strdup("$~");
+			i += 2;
+		}
+		else if (tok->content[i] == '$')
+			aux = get_exp(tok->content, &i, msh);
+		else
+			aux = get_word(tok->content, &i);
+		line = strjoin_msh(line, aux);
 	}
+	free(tok->content);
+	tok->content = ft_strdup(line);
+	free(line);
+}
 
+static void	expand_home(t_token *tok, t_msh *msh)
+{
+	char	*line;
+	t_env	*aux;
+
+	line = NULL;
+	aux = msh->env;
+	while (aux)
+	{
+		if (ft_strncmp("HOME", aux->type, 5) == 0)
+		{
+			line = ft_strdup(aux->content);
+			break ;
+		}
+		aux = aux->next;
+	}
+	if (!line)
+		line = ft_strdup("");
+	free(tok->content);
+	tok->content = ft_strdup(line);
+	free(line);
+}
+
+static void	expand_both(t_token *tok, t_msh *msh)
+{
+	char	*home;
+	char	*aux;
+
+	aux = ft_strdup(&tok->content[1]);
+	if (!aux)
+		return ;
+	expand_home(tok, msh);
+	home = ft_strdup(tok->content);
+	if (!home)
+		return ;
+	free(tok->content);
+	tok->content = ft_strjoin(home, aux);
+	if (!tok->content)
+		return ;
+	free(home);
+	free(aux);
 }
 
 void	expand_tokens(t_token **tokens, t_msh *msh)
 {
-	t_token *temporal;
+	t_token	*tmp;
 
-	temporal = *tokens;
-	while (temporal)
+	tmp = *tokens;
+	while (tmp)
 	{
-		if (temporal->type == T_DL)
-			temporal = temporal->next;
-		else if (temporal->exp == 1)
-			expand_content(temporal, msh);
+		if (tmp->type == T_DL)
+			tmp = tmp->next;
+		else if (tmp->exp == 1)
+			expand_content(tmp, msh);
+		else if (tmp->exp == 2)
+			expand_home(tmp, msh);
+		else if (tmp->exp == 3)
+			expand_both(tmp, msh);
+		if (tmp)
+			tmp = tmp->next;
 	}
 }

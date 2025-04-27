@@ -1,0 +1,61 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   join_tokens.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/27 16:00:11 by mimi-notebo       #+#    #+#             */
+/*   Updated: 2025/04/27 16:08:17 by mimi-notebo      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
+
+static  t_token *pop(t_token tok)
+{
+    t_token *aux;
+
+    if (tok->next)
+        aux = tok->next;
+    else
+        aux = NULL;
+    free(tok->contect);
+    free(tok);
+    return (aux);
+}
+
+static t_token  *join_pop(t_token *tok)
+{
+    t_token *aux;
+    char    *first;
+    char    *next;
+
+    aux = tok;
+    first = ft_strdup(tok->content);
+    next = ft_strdup(tok->next->content);
+    free(aux->content);
+    aux->content = ft_strjoin(first, next);
+    free(first);
+    free(next);
+    aux->next = pop(tok->next);
+    return (aux);
+}
+
+void    join_tokens(t_token **tokens)
+{
+    t_token *aux;
+
+    aux = *tokens;
+    while (aux)
+    {
+        while ((aux->type == T_WORD || aux->type == T_Q || aux->type == T_DQ)
+			&& aux->next && aux->next->flag == 1)
+		{
+			aux = join_pop(aux);
+		}
+		if (aux->type == T_Q || aux->type == T_DQ)
+			aux->type = T_WORD;
+		aux = aux->next;
+    }
+}
