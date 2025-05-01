@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/27 16:40:59 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/01 16:44:14 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "Libft/libft.h"
 
 /* COLOR */
 # define RST					"\033[0m"    // Reset per tornare al colore normale
@@ -41,7 +42,9 @@
 # define	WRONG_Q "unexpected EOF while looking for matching `''"
 # define	WRONG_DQ "unexpected EOF while looking for matching `\"'"
 # define	EXPORT "export: not a valid identifier"
-
+# define 	MLLC_ERR "Error asignning Malloc"
+# define 	CTRLD_HD "warning: here-document \
+delimited by end-of-file (wanted `"
 typedef enum	e_token_type
 {
 	T_WORD,
@@ -102,9 +105,8 @@ void    init_msh(char **envp, t_msh *msh);
 t_env	*enviroment_lst(char **envp);
 void    get_input(t_msh *msh);
 
-/////////////TOKENIZADOR//////////////
+/////////////TOKENIZER//////////////
 t_token			*set_tokens(char *line, t_msh *msh);
-void	    	set_backslash_token(char *line, int *i, t_token **tokens, int flag);
 void			set_word_token(char *line, int *i, t_token **tokens);
 void			set_greather_token(char *line, int *i, t_token **tokens);
 void			set_lower_token(char *line, int *i, t_token **tokens);
@@ -124,20 +126,44 @@ size_t	ft_strlen(const char *s);
 
 /////////////NODES//////////////
 void		add_node_back(t_token **lst, t_token *new);
-t_token 	new_node(t_token **content, int type, int flag);
+t_token 	*new_node(char *content, int type, int flag);
 void		create_token_lst(t_token **tok, int type, char *content, int flag);
+t_cmd		*new_node_command(void);
+int			command_content(t_cmd *new, t_token *tok);
 
+/////////////COMMANDS//////////////
+t_cmd	*new_node_cmd(void);
+int		cmd_content(t_cmd *new, t_token *tok);
+void	create_cmd_lst(t_cmd **cmd, t_cmd *new);
+void	add_back_cmd(t_cmd **lst, t_cmd *new);
 /////////////ENVIRONMENT//////////////
-t_env	*env_lst(char **envp);
-void    init_env_lst(t_env **lst, char  **envp);
-
+t_env		*env_lst(char **envp);
+////////////////SET/////////////////
+void	set_outfile(t_token **tok, t_cmd *new, t_msh *msh);
+void	set_append(t_token **tok, t_cmd *new, t_msh *msh);
+void	set_infile(t_token **tok, t_cmd *new, t_msh *msh);
 ////////////////FLAGS/////////////////
-void expand_flag(t_token *tok);
-
+void	expand_flag(t_token *tok);
+////////////////HERE-DOC/////////////////
+void	set_heredoc(t_token **tok, t_cmd *new, t_msh *msh);
+void	ctrl_c_hd(int signal);
+char	*exp_line(char *str, t_msh *msh);
+char	*expand_heredoc(char *line, t_msh *msh);
+void	free_exit_hd(t_msh *msh, t_cmd *new, int state);
 ////////////////EXPAND/////////////////
 char	*no_expand_var(char *s1, int *i);
 void	expand_content(t_token *tok, t_msh *msh);
 void	expand_tokens(t_token **tokens, t_msh *msh);
+
+
+
+////////////////FREE/////////////////
+void	free_msh(t_msh *msh);
+void	free_env(t_env *env);
+
+////////////////SIGNALS/////////////////
+void	setup_signals(t_msh *msh);
+
 /* Executor */
 
 void			executor(t_msh *msh);

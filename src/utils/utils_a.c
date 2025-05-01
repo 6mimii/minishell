@@ -6,13 +6,11 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:22:03 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/04/24 17:34:27 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:40:56 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "../minishell.h"
 
 int ft_strcmp(char *s1, char *s2)
 {

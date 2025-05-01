@@ -6,15 +6,15 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:20:37 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/03/17 16:40:22 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:24:22 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-void	add_back_command (t_command **lst, t_command *new)
+void	add_back_command (t_cmd **lst, t_cmd *new)
 {
-	t_command	*new_node;
+	t_cmd	*new_node;
 	
 	if (*lst == NULL)
 	{
@@ -27,11 +27,11 @@ void	add_back_command (t_command **lst, t_command *new)
 	new_node->next = new;
 }
 
-t_command	*new_node_cmd(void)
+t_cmd	*new_node_command(void)
 {
-	t_command	*new;
+	t_cmd	*new;
 
-	new = (t_command *)malloc(sizeof(t_command));
+	new = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!new)
 		return (NULL);
 	new->error = 0;
@@ -41,7 +41,7 @@ t_command	*new_node_cmd(void)
 	return (new);
 }
 
-void	create_command_list(t_command **cmd, t_command *new)
+void	create_command_list(t_cmd **cmd, t_cmd *new)
 {
 	if (!*cmd)
 		*cmd = new;
@@ -49,7 +49,7 @@ void	create_command_list(t_command **cmd, t_command *new)
 		add_back_command(cmd, new);
 }
 
-int	command_content(t_command *new, t_token *tok)
+int	command_content(t_cmd *new, t_token *tok)
 {
 	t_token	*aux;
 	int		i;
@@ -59,7 +59,7 @@ int	command_content(t_command *new, t_token *tok)
 	
 	while(aux && aux->type != T_PIPE)
 	{
-		if (aux->type == T_G || aux->type == T_DG || aux ->type == T_L || aux->type = T_DL)
+		if (aux->type == T_G || aux->type == T_DG || aux ->type == T_L || aux->type == T_DL)
 			aux = aux->next;
 		else
 		{
@@ -86,7 +86,7 @@ int command_len(t_token *tok)
 	while (aux && aux->type != T_PIPE)
 	{
 		if (aux->type == T_G || aux->type == T_DG
-			|| aux ->type == T_L || aux->type = T_DL)
+			|| aux ->type == T_L || aux->type == T_DL)
 			aux = aux->next;
 		else
 			i++;

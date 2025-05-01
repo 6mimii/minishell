@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   multiple_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:46:36 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/15 18:21:11 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:36:27 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static void	create_child(t_msh *msh, t_cmd *cmd, int *fd, int fd_in)
 {
@@ -30,7 +30,7 @@ static void	create_child(t_msh *msh, t_cmd *cmd, int *fd, int fd_in)
 		dup2(fd[1], 1);
 	if (is_builtin(msh, cmd) == 0)
 		free_and_exit("", msh, EXIT_SUCCESS, false);
-	execute_cmd(msh, cmd, msh->path);
+	run_external_command(msh, cmd, msh->path);
 }
 
 void	multiple_cmds(t_msh *msh, int fd_in)

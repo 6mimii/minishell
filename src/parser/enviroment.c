@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   enviroment.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:40 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/02/11 15:30:42 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:01:15 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-static void init_env_lst(t_env **lst, char  **envp) // lista donde guardaremos las v. entorno, variables d entorno
+static void init_env_lst(t_env **lst, char  **envp)
 {
 	t_env	*new;
 	int		i;

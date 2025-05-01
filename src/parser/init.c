@@ -6,18 +6,18 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:47 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/24 17:49:55 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:32:07 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 static int clean_tokens (t_msh *msh)
 {
 	if (!msh->tokens || msh->parse_error)
 		return (0);
-	expand_flag(msh->tokens);
-	expand_tokens(&msh->tokens, msh);
+	// expand_flag(msh->tokens);
+	// expand_tokens(&msh->tokens, msh);
 	return (1); // terminar
 }
 
@@ -43,7 +43,6 @@ void get_input(t_msh *msh)
 			msh->tokens = set_tokens(msh->input, msh);
 			if (clean_tokens(msh))
 			{
-
 			}
 		}
 		msh->input = readline("Mimishell% ");

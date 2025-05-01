@@ -6,11 +6,11 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:47:18 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/03/17 16:48:17 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:31:07 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static void	free_tokens(t_token **tokens)
 {
@@ -41,9 +41,9 @@ void	free_matrix(char **matrix)
 	matrix = NULL;
 }
 
-void	free_commands(t_command **cmd)
+void	free_commands(t_cmd **cmd)
 {
-	t_command	*aux;
+	t_cmd	*aux;
 	
 	if (!*cmd || !cmd)
 		return ;

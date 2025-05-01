@@ -6,11 +6,11 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:45:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/24 18:02:47 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:30:59 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int		is_builtin(t_msh *msh, t_cmd *cmd)
 {

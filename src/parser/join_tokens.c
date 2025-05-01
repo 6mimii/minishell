@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   join_tokens.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:00:11 by mimi-notebo       #+#    #+#             */
-/*   Updated: 2025/04/27 16:08:17 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/01 17:35:16 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static  t_token *pop(t_token tok)
+static  t_token *pop(t_token *tok)
 {
     t_token *aux;
 
@@ -20,7 +20,7 @@ static  t_token *pop(t_token tok)
         aux = tok->next;
     else
         aux = NULL;
-    free(tok->contect);
+    free(tok->content);
     free(tok);
     return (aux);
 }

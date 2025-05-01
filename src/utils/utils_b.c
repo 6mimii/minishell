@@ -6,13 +6,11 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:13:09 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/03/17 12:50:32 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:41:19 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "../minishell.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {

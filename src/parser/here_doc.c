@@ -3,41 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:16:50 by mimi-notebo       #+#    #+#             */
-/*   Updated: 2025/04/27 16:27:47 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/01 17:34:40 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../minishell.h"
 
 char	*exp_line(char *str, t_msh *msh)
 {
-	char	*aux;
+	// char	*aux;
 	char	*line;
 	int		i;
 
+	(void)msh;
 	line = ft_strdup("");
 	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\\')
-			aux = get_noexp_var(str, &i);
-		else if (str[i] == '$' && str[i + 1] == '~')
-		{
-			aux = ft_strdup("$~");
-			i += 2;
-		}
-		else if (str[i] == '$')
-			aux = get_exp(str, &i, msh);
-		else
-			aux = get_word(str, &i);
-		line = strjoin_msh(line, aux);
-	}
-	free(str);
-	str = ft_strdup(line);
-	free(line);
+	// while (str[i])
+	// {
+	// 	if (str[i] == '\\')
+	// 		aux = get_noexp_var(str, &i);
+	// 	else if (str[i] == '$' && str[i + 1] == '~')
+	// 	{
+	// 		aux = ft_strdup("$~");
+	// 		i += 2;
+	// 	}
+	// 	else if (str[i] == '$')
+	// 		aux = get_exp(str, &i, msh);
+	// 	else
+	// 		aux = get_word(str, &i);
+	// 	line = strjoin_msh(line, aux);
+	// }
+	// free(str);
+	// str = ft_strdup(line);
+	// free(line);
 	return (str);
 }
 
@@ -67,6 +68,7 @@ void	ctrl_c_hd(int signal)
 
 void	free_exit_hd(t_msh *msh, t_cmd *new, int state)
 {
-	free_cmds(&new);
+	(void)new;
+	// free_cmds(&new);
 	free_and_exit("", msh, state, false);
 }

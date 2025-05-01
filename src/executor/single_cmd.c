@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   single_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsaffiri <fsaffiri@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:46:20 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/04/15 18:20:59 by fsaffiri         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:39:12 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*find_cmd(char **path, char *cmd, t_msh *msh)
 {
@@ -47,7 +47,7 @@ void run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 	{
 		free_and_exit("", msh, 0, false);
 	}
-	full_path = find_cmd(cmd->argv[0], paths, msh);
+	full_path = find_cmd(paths, cmd->argv[0], msh);
     if (!full_path)
 		free_and_exit("Command not found", msh, 127, true);
 	execve(full_path, cmd->argv, msh->envp);
@@ -80,5 +80,5 @@ void handle_single_command(t_msh *msh)
 		}
 		run_external_command(msh, msh->cmd, msh->path);
 	}
-	wait_for_child(msh, pid);
+	wait_handler(msh, pid); // wait_for:child
 }
