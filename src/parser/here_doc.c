@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:16:50 by mimi-notebo       #+#    #+#             */
-/*   Updated: 2025/05/01 17:34:40 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:29:53 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ctrl_c_hd(int signal)
 	exit(130);
 }
 
-void	free_exit_hd(t_msh *msh, t_cmd *new, int state)
+void	free_and_exit_hd(t_msh *msh, t_cmd *new, int state)
 {
 	(void)new;
 	// free_cmds(&new);

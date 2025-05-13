@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:45:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/01 15:30:59 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:38:13 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ void	executor(t_msh *msh)
 	fd_in = msh->cmd->fd_in;
     msh->path = get_path(msh);
     setup_signals(msh);
-    g_signal = 1;
+//    g_signal = 1;
     if (msh->cmd_len == 1)
 		handle_single_command(msh);
     else
 		multiple_cmds(msh, fd_in);
-    g_signal = 0;
+   // g_signal = 0;
     dup2(saved_stdin, STDIN_FILENO);
     dup2(saved_stdout, STDOUT_FILENO);
     setup_signals(msh);

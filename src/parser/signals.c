@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 15:22:29 by mimi-notebo       #+#    #+#             */
-/*   Updated: 2025/05/01 17:37:55 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:24:19 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void    ctrl_c(void)
 {
-    if (g_signal == 0)
+/*     if (g_signal == 0)
     {
         rl_on_new_line();
         rl_replace_line("", 0);
@@ -26,7 +26,7 @@ void    ctrl_c(void)
         g_signal = 1;
     }
     else if (g_signal == 1)
-        write(1, "\n", 1);
+        write(1, "\n", 1); */
 }
 
 void	setup_signals(t_msh *msh)

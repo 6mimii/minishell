@@ -84,7 +84,6 @@ src/parser/nodes.c \
 src/parser/enviroment.c \
 src/parser/command_utils.c \
 src/parser/commands.c \
-src/parser/error.c \
 src/parser/expand_flag.c \
 src/parser/expand.c \
 src/parser/free_functions.c \
@@ -106,6 +105,7 @@ src/executor/single_cmd.c \
 src/executor/unset.c \
 src/utils/utils_a.c \
 src/utils/utils_b.c \
+src/utils/utils_c.c \
 src/utils/error.c \
 
 CC = clang

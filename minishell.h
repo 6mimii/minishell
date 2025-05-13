@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/01 16:44:14 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:33:27 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ void	set_heredoc(t_token **tok, t_cmd *new, t_msh *msh);
 void	ctrl_c_hd(int signal);
 char	*exp_line(char *str, t_msh *msh);
 char	*expand_heredoc(char *line, t_msh *msh);
-void	free_exit_hd(t_msh *msh, t_cmd *new, int state);
+void	free_and_exit_hd(t_msh *msh, t_cmd *new, int state);
 ////////////////EXPAND/////////////////
 char	*no_expand_var(char *s1, int *i);
 void	expand_content(t_token *tok, t_msh *msh);
@@ -199,6 +199,7 @@ void			multiple_cmds(t_msh *msh, int fd_in);
 char			**get_path(t_msh *msh);
 void	set_cmd_ind(t_cmd *cmd);
 void			wait_handler(t_msh *msh, pid_t pid);
+void	free_and_exit_ex(t_msh *msh);
 
 /* Errors */
 void			error_msh(char *msg, t_msh *msh, int state);

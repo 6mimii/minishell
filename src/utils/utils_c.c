@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:47:53 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/01 16:35:25 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:22:19 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ void	safe_fork(pid_t *pid)
 {
 	*pid = fork();
 	if (*pid < 0)
-		return (error_handl("Fork error"));
+	{
+		//error_handl("Fork error");
+		return ;
+	}
 }
 
 void	set_cmd_ind(t_cmd *cmd)
@@ -36,6 +39,7 @@ void	set_cmd_ind(t_cmd *cmd)
 
 char	**get_path(t_msh *msh)
 {
+	(void)msh;
 	char	*path_env;
 	char	**paths;
 	

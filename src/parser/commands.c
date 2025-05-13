@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:39:35 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/01 15:29:26 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:37:34 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	set_cmd(t_msh *msh, t_token **tokens)
 		new_command->argv[0] = NULL;
 	set_fd(tokens, new_command, msh);
 	msh->cmd_len += 1;
-	create_cmd_lst(&msh->cmd, new_command);
+	//create_cmd_lst(&msh->cmd, new_command);
 }
 
 void	get_command(t_msh *msh)
