@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:46:20 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/01 16:39:12 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/18 19:13:32 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,30 @@ char	*find_cmd(char **path, char *cmd, t_msh *msh)
 	return (NULL);
 }
 
-void run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
+void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 {
-	char *full_path;
-	
+	char	*full_path;
+
 	if (!cmd->argv[0] || cmd->argv[0][0] == '\0')
 	{
 		free_and_exit("", msh, 0, false);
 	}
 	full_path = find_cmd(paths, cmd->argv[0], msh);
-    if (!full_path)
+	if (!full_path)
 		free_and_exit("Command not found", msh, 127, true);
 	execve(full_path, cmd->argv, msh->envp);
 	free(full_path);
 	free_and_exit("execve failed", msh, EXIT_FAILURE, true);
 }
 
-void handle_single_command(t_msh *msh)
+void	handle_single_command(t_msh *msh)
 {
 	pid_t	pid;
-	
+
 	if (msh->cmd->error)
-		return;
+		return ;
 	if (is_builtin(msh, msh->cmd))
-		return;
+		return ;
 	pid = fork();
 	if (pid < 0)
 		error_msh("Error creating pid", msh, 0);
@@ -80,5 +80,5 @@ void handle_single_command(t_msh *msh)
 		}
 		run_external_command(msh, msh->cmd, msh->path);
 	}
-	wait_handler(msh, pid); // wait_for:child
+	wait_handler(msh, pid);
 }

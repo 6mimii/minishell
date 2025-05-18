@@ -6,13 +6,13 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:45:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/13 16:38:13 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/18 18:52:24 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int		is_builtin(t_msh *msh, t_cmd *cmd)
+int	is_builtin(t_msh *msh, t_cmd *cmd)
 {
 	if (ft_strcmp(cmd->argv[0], "cd") == 0)
 		return (ft_cd(msh, cmd), 0);
@@ -33,23 +33,23 @@ int		is_builtin(t_msh *msh, t_cmd *cmd)
 
 void	executor(t_msh *msh)
 {
+	int	saved_stdin;
+	int	saved_stdout;
 	int	fd_in;
-    int	saved_stdin;
-    int	saved_stdout;
-	
+
 	saved_stdin = dup(STDIN_FILENO);
-    saved_stdout = dup(STDOUT_FILENO);
-    set_cmd_ind(msh->cmd);
+	saved_stdout = dup(STDOUT_FILENO);
+	set_cmd_ind(msh->cmd);
 	fd_in = msh->cmd->fd_in;
-    msh->path = get_path(msh);
-    setup_signals(msh);
-//    g_signal = 1;
-    if (msh->cmd_len == 1)
+	msh->path = get_path(msh);
+	setup_signals(msh);
+	g_signal = 1;
+	if (msh->cmd_len == 1)
 		handle_single_command(msh);
-    else
+	else
 		multiple_cmds(msh, fd_in);
-   // g_signal = 0;
-    dup2(saved_stdin, STDIN_FILENO);
-    dup2(saved_stdout, STDOUT_FILENO);
-    setup_signals(msh);
+	g_signal = 0;
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	setup_signals(msh);
 }

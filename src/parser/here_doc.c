@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:16:50 by mimi-notebo       #+#    #+#             */
-/*   Updated: 2025/05/13 16:29:53 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/18 20:16:25 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,31 @@
 
 char	*exp_line(char *str, t_msh *msh)
 {
-	// char	*aux;
+	char	*aux;
 	char	*line;
 	int		i;
 
 	(void)msh;
 	line = ft_strdup("");
 	i = 0;
-	// while (str[i])
-	// {
-	// 	if (str[i] == '\\')
-	// 		aux = get_noexp_var(str, &i);
-	// 	else if (str[i] == '$' && str[i + 1] == '~')
-	// 	{
-	// 		aux = ft_strdup("$~");
-	// 		i += 2;
-	// 	}
-	// 	else if (str[i] == '$')
-	// 		aux = get_exp(str, &i, msh);
-	// 	else
-	// 		aux = get_word(str, &i);
-	// 	line = strjoin_msh(line, aux);
-	// }
-	// free(str);
-	// str = ft_strdup(line);
-	// free(line);
+	while (str[i])
+	{
+		if (str[i] == '\\')
+			aux = no_expand_var(str, &i);
+		else if (str[i] == '$' && str[i + 1] == '~')
+		{
+			aux = ft_strdup("$~");
+			i += 2;
+		}
+		else if (str[i] == '$')
+			aux = get_exp(str, &i, msh);
+		else
+			aux = get_word(str, &i);
+		line = ft_strjoin(line, aux);
+	}
+	free(str);
+	str = ft_strdup(line);
+	free(line);
 	return (str);
 }
 
@@ -69,6 +69,5 @@ void	ctrl_c_hd(int signal)
 void	free_and_exit_hd(t_msh *msh, t_cmd *new, int state)
 {
 	(void)new;
-	// free_cmds(&new);
 	free_and_exit("", msh, state, false);
 }

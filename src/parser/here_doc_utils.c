@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:17:16 by mimi-notebo       #+#    #+#             */
-/*   Updated: 2025/05/13 16:38:03 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/18 19:15:41 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void	set_heredoc(t_token **tok, t_cmd *new, t_msh *msh)
 		if (new->fd_in > 2)
 			close(new->fd_in);
 		fd = open(".here_doc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		//g_signal = 2;
 		pid = fork();
 		if (pid == 0)
 		{
@@ -98,7 +97,6 @@ void	set_heredoc(t_token **tok, t_cmd *new, t_msh *msh)
 		}
 		else if (pid > 0)
 			wait_hd(*tok, new, msh, fd);
-		//g_signal = 0;
 	}
 	*tok = (*tok)->next;
 }

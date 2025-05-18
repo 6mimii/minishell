@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:39:35 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/13 16:37:34 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/18 18:49:22 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,26 +31,27 @@ static void	set_fd(t_token **tok, t_cmd *new, t_msh *msh)
 
 int	get_command_len(t_token *token)
 {
-	t_token *aux;
+	t_token	*aux;
 	int		len;
-	
+
 	aux = token;
 	len = 0;
-	while(aux && aux->type != T_PIPE)
+	while (aux && aux->type != T_PIPE)
 	{
-		if (aux->type == T_G || aux->type == T_DG || aux->type == T_L || aux->type == T_DL)
+		if (aux->type == T_G || aux->type == T_DG || aux->type == T_L
+			|| aux->type == T_DL)
 			aux = aux->next;
 		else
 			len++;
 		aux = aux->next;
 	}
-	return(len);
+	return (len);
 }
 
 static void	set_cmd(t_msh *msh, t_token **tokens)
 {
-	t_cmd 		*new_command;
-	int			len;
+	t_cmd	*new_command;
+	int		len;
 
 	len = get_command_len(*tokens);
 	new_command = new_node_command();
@@ -69,7 +70,7 @@ static void	set_cmd(t_msh *msh, t_token **tokens)
 		new_command->argv[0] = NULL;
 	set_fd(tokens, new_command, msh);
 	msh->cmd_len += 1;
-	//create_cmd_lst(&msh->cmd, new_command);
+	create_command_list(&msh->cmd, new_command);
 }
 
 void	get_command(t_msh *msh)

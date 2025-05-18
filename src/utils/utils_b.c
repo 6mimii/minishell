@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:13:09 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/01 16:41:19 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/18 20:22:00 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,17 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	sub[i] = '\0';
 	return (sub);
 }
+
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
+
 	i = 0;
 	while (s[i])
 		i++;
 	return (i);
 }
+
 size_t	ft_strlcpy(char *dst, const char *src, size_t dst_size)
 {
 	size_t	i;
@@ -60,16 +63,21 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dst_size)
 	dst[i] = '\0';
 	return (src_len);
 }
-char *ft_strdup(const char *s1)
+
+char	*ft_strdup(const char *s1)
 {
 	char	*str;
 	int		i;
+
 	i = 0;
-	while(s1[i])
+	while (s1[i])
 		i++;
 	if (!s1)
 		return (NULL);
-	str = (char *)malloc(sizeof(char) * i);
+	i = 0;
+	while (s1[i])
+		i++;
+	str = (char *)malloc(sizeof(char) * (i + 1));
 	if (str == NULL)
 		return (NULL);
 	ft_strlcpy(str, s1, ft_strlen(s1) + 1);
@@ -78,7 +86,8 @@ char *ft_strdup(const char *s1)
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	while (s[i])
 	{

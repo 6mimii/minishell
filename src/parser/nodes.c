@@ -6,20 +6,20 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:21:28 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/01 14:55:06 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/18 19:16:19 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void add_node_back(t_token **lst, t_token *new)
+void	add_node_back(t_token **lst, t_token *new)
 {
 	t_token		*new_node;
 
 	if (*lst == NULL)
 	{
 		*lst = new;
-		return;
+		return ;
 	}
 	new_node = *lst;
 	while (new_node->next != NULL)
@@ -27,7 +27,7 @@ void add_node_back(t_token **lst, t_token *new)
 	new_node->next = new;
 }
 
-t_token *new_node(char *content, int type, int flag)
+t_token	*new_node(char *content, int type, int flag)
 {
 	t_token	*new;
 
@@ -37,7 +37,7 @@ t_token *new_node(char *content, int type, int flag)
 	new->content = ft_strdup(content);
 	new->type = type;
 	new->flag = flag;
-	return (new);	
+	return (new);
 }
 
 void	create_token_lst(t_token **tok, int type, char *content, int flag)
