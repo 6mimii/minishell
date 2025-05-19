@@ -4,7 +4,7 @@
 /*   single_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                +#+#+#+#+#+   */
 /*   Created: 2025/03/07 12:46:20 by fsaffiri          #+#    #+#             */
 /*   Updated: 2025/05/18 19:13:32 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
@@ -50,35 +50,12 @@ char	*find_cmd(char **path, char *cmd, t_msh *msh)
 void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 {
 	char	*full_path;
-	int		i;
 
 	if (!cmd || !cmd->argv || !cmd->argv[0] || cmd->argv[0][0] == '\0')
 	{
 		ft_putstr_fd("Minishell: command missing\n", 2);
 		free_and_exit("", msh, 0, false);
 	}
-	
-	// Debug
-	ft_putstr_fd("Command: ", 2);
-	ft_putendl_fd(cmd->argv[0], 2);
-	
-	// Check if argv is properly NULL-terminated
-	i = 0;
-	while (cmd->argv[i])
-	{
-		ft_putstr_fd("argv[", 2);
-		ft_putnbr_fd(i, 2);
-		ft_putstr_fd("]: ", 2);
-		ft_putendl_fd(cmd->argv[i], 2);
-		i++;
-	}
-	
-	// Debug environment variables
-	ft_putstr_fd("Environment check: ", 2);
-	if (!msh->envp)
-		ft_putendl_fd("envp is NULL", 2);
-	else
-		ft_putendl_fd("envp exists", 2);
 	
 	full_path = find_cmd(paths, cmd->argv[0], msh);
 	if (!full_path)
@@ -88,9 +65,6 @@ void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 		ft_putendl_fd(": command not found", 2);
 		free_and_exit("", msh, 127, false);
 	}
-	
-	ft_putstr_fd("Executing: ", 2);
-	ft_putendl_fd(full_path, 2);
 	
 	if (!msh->envp) {
 		// Fallback to system environment if our environment is NULL
@@ -133,9 +107,29 @@ void	handle_single_command(t_msh *msh)
 	write(2, msh->cmd->argv[0], ft_strlen(msh->cmd->argv[0]));
 	write(2, "\n", 1);
 	
-	if (is_builtin(msh, msh->cmd))
-	{
-		write(2, "Command is a builtin\n", 21);
+	// Debugging: Log the command and arguments being processed
+	write(2, "Debug: Command being processed: ", 30);
+	write(2, msh->cmd->argv[0], ft_strlen(msh->cmd->argv[0]));
+	write(2, "\n", 1);
+	for (int i = 1; msh->cmd->argv[i]; i++) {
+		write(2, "Arg: ", 5);
+		write(2, msh->cmd->argv[i], ft_strlen(msh->cmd->argv[i]));
+		write(2, "\n", 1);
+	}
+
+	// Debugging: Log the command and arguments being passed to builtins
+	write(2, "Debug: Command: ", 15);
+	write(2, msh->cmd->argv[0], ft_strlen(msh->cmd->argv[0]));
+	write(2, "\n", 1);
+	for (int i = 1; msh->cmd->argv[i]; i++) {
+		write(2, "Arg: ", 5);
+		write(2, msh->cmd->argv[i], ft_strlen(msh->cmd->argv[i]));
+		write(2, "\n", 1);
+	}
+
+	if (is_builtin(msh, msh->cmd) == 0) {
+		write(2, "Builtin executed successfully\n", 30);
+		msh->state = 0; // Indicar éxito en la ejecución del builtin
 		return;
 	}
 	

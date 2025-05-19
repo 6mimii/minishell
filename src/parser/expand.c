@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:42:47 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/18 20:16:11 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,8 @@ void	expand_content(t_token *tok, t_msh *msh)
 	char	*line;
 	char	*aux;
 
-	// Safety checks
-	if (!tok || !tok->content || !msh) {
-		write(2, "Invalid parameters in expand_content\n", 37);
+	if (!tok || !tok->content || !msh)
 		return;
-	}
 
 	i = 0;
 	line = ft_strdup("");
@@ -80,18 +77,13 @@ static void	expand_home(t_token *tok, t_msh *msh)
 	char	*line;
 	t_env	*aux;
 	
-	// Safety checks
-	if (!tok || !msh) {
-		write(2, "Invalid parameters in expand_home\n", 34);
+	if (!tok || !msh)
 		return;
-	}
 
 	line = NULL;
 	
-	if (!msh->env) {
-		write(2, "Warning: msh->env is NULL in expand_home\n", 41);
+	if (!msh->env)
 		return;
-	}
 	
 	aux = msh->env;
 	while (aux)
@@ -115,23 +107,20 @@ static void	expand_both(t_token *tok, t_msh *msh)
 	char	*home;
 	char	*aux;
 	
-	// Safety checks
-	if (!tok || !tok->content || !msh) {
-		write(2, "Invalid parameters in expand_both\n", 34);
+	if (!tok || !tok->content || !msh)
 		return;
-	}
 	
 	aux = ft_strdup(&tok->content[1]);
 	if (!aux)
-		return ;
+		return;
 	expand_home(tok, msh);
 	home = ft_strdup(tok->content);
 	if (!home)
-		return ;
+		return;
 	free(tok->content);
 	tok->content = ft_strjoin(home, aux);
 	if (!tok->content)
-		return ;
+		return;
 	free(home);
 	free(aux);
 }
@@ -139,25 +128,15 @@ static void	expand_both(t_token *tok, t_msh *msh)
 void	expand_tokens(t_token **tokens, t_msh *msh)
 {
 	t_token	*tmp;
-
-	// Debug and safety check
-	write(2, "In expand_tokens\n", 17);
 	
-	if (!tokens || !*tokens) {
-		write(2, "No tokens to expand\n", 20);
+	if (!tokens || !*tokens || !msh)
 		return;
-	}
-	
-	if (!msh) {
-		write(2, "Warning: msh is NULL in expand_tokens\n", 38);
-		return;
-	}
 
 	tmp = *tokens;
 	while (tmp)
 	{
-		if (!tmp->content) {
-			write(2, "Warning: Token with NULL content in expand_tokens\n", 50);
+		if (!tmp->content)
+		{
 			tmp = tmp->next;
 			continue;
 		}

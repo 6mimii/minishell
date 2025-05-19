@@ -3,18 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:39:35 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/18 18:49:22 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+// Function to check if a token is a logical operator (like &&)
+static int is_logical_operator(t_token *token)
+{
+    if (!token || !token->content)
+        return 0;
+    
+    // Check for logical operators
+    if (ft_strcmp(token->content, "&&") == 0)
+        return 1;
+    
+    return 0;
+}
+
 static void	set_fd(t_token **tok, t_cmd *new, t_msh *msh)
 {
-	while (*tok && (*tok)->type != T_PIPE)
+	while (*tok && (*tok)->type != T_PIPE && !is_logical_operator(*tok))
 	{
 		if ((*tok)->type == T_G)
 			set_outfile(tok, new, msh);
@@ -41,7 +54,7 @@ int	get_command_len(t_token *token)
 
 	aux = token;
 	len = 0;
-	while (aux && aux->type != T_PIPE)
+	while (aux && aux->type != T_PIPE && !is_logical_operator(aux))
 	{
 		if (aux->type == T_G || aux->type == T_DG || aux->type == T_L
 			|| aux->type == T_DL)
@@ -70,7 +83,7 @@ static void	set_cmd(t_msh *msh, t_token **tokens)
 
 	if (!tokens || !*tokens)
 		return;
-		
+
 	len = get_command_len(*tokens);
 	new_command = new_node_command();
 	if (!new_command)
@@ -97,32 +110,27 @@ static void	set_cmd(t_msh *msh, t_token **tokens)
 	set_fd(tokens, new_command, msh);
 	msh->cmd_len += 1;
 	create_command_list(&msh->cmd, new_command);
+	
+	// Skip tokens until we reach a pipe or logical operator or the end
+	while (*tokens && (*tokens)->type != T_PIPE && !is_logical_operator(*tokens)) {
+		*tokens = (*tokens)->next;
+	}
 }
 
 void	get_command(t_msh *msh)
 {
 	t_token	*tmp;
-	int     cmd_count = 0;
 
-	// Debug
-	write(2, "Starting command parsing\n", 25);
-	
 	tmp = msh->tokens;
 	while (tmp)
 	{
-		if (tmp->type != T_PIPE)
+		if (tmp->type != T_PIPE && !is_logical_operator(tmp))
 		{
 			set_cmd(msh, &tmp);
-			cmd_count++;
 		}
 		else
+		{
 			tmp = tmp->next;
+		}
 	}
-	
-	// Debug - count commands
-	char num[12];
-	write(2, "Command count: ", 15);
-	sprintf(num, "%d", cmd_count);
-	write(2, num, ft_strlen(num));
-	write(2, "\n", 1);
 }

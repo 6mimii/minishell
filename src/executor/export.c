@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:49:05 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/01 16:24:03 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,46 +83,35 @@ static void	add_vars(t_msh *msh, char *str)
 
 static int	parse_export(t_msh *msh, char *line)
 {
-	int	i;
-
-	i = 0;
-	if (!ft_isalpha(line[i]) && line[i] != '_')
+	if (!ft_isalpha(line[0]) && line[0] != '_') {
+		write(2, "Error: Invalid start character\n", 30);
 		return (error_msh(EXPORT, msh, 1), 0);
-	while (line[i] && line[i] != '=')
-	{
-		if (!ft_isalnum(line[i]) && line[i] != '_')
-		{
-			if (line[i] != '+' && line[i] != '=')
-				return (error_msh(EXPORT, msh, 1), 0);
-			if (line[i] == '+' && line[i + 1] && line[i + 1] != '=')
-				return (error_msh(EXPORT, msh, 1), 0);
+	}
+	for (int i = 0; line[i] && line[i] != '='; i++) {
+		if (!ft_isalnum(line[i]) && line[i] != '_') {
+			write(2, "Error: Invalid character in variable name\n", 40);
+			return (error_msh(EXPORT, msh, 1), 0);
 		}
-		i++;
 	}
 	return (1);
 }
 
 void	ft_export(t_msh *msh, t_cmd *cmd)
 {
-	int	i;
-
-	i = 0;
-	if (!cmd->argv[1])
+	if (!cmd->argv[1]) {
 		print_export(msh->env, cmd->fd_out);
-	else
-	{
-		while (cmd->argv[++i])
-		{
-			if (parse_export(msh, cmd->argv[i]))
-			{
-				if (!ft_strchr(cmd->argv[i], '='))
-				{
-					if (get_env_type(msh, cmd->argv[i]))
-						continue ;
-					add_env(msh, cmd->argv[i], NULL);
-				}
-				else
-					add_vars(msh, cmd->argv[i]);
+		return;
+	}
+	for (int i = 1; cmd->argv[i]; i++) {
+		if (!parse_export(msh, cmd->argv[i])) {
+			msh->state = 1; // Indicar error
+			continue;
+		}
+		if (ft_strchr(cmd->argv[i], '=')) {
+			add_vars(msh, cmd->argv[i]);
+		} else {
+			if (!get_env_type(msh, cmd->argv[i])) {
+				add_env(msh, cmd->argv[i], NULL);
 			}
 		}
 	}

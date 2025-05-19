@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_tokens.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 19:11:58 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/05/18 19:12:30 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,36 @@ static void	set_backslash_token(char *input, int *i, t_token **tokens, int flag)
 	*i += 1;
 }
 
+// New function to handle logical operators like &&
+void set_logical_operator_token(char *line, int *i, t_token **tokens)
+{
+    if (line[*i] && line[*i + 1] && line[*i] == '&' && line[*i + 1] == '&')
+    {
+        // Debugging: Log logical operators detection
+        write(2, "Debug: Found logical operator && in tokenization\n", 48);
+        
+        char *str = ft_strdup("&&");
+        // Debugging: Log created token
+        write(2, "Debug: Creating logical operator token: ", 39);
+        write(2, str, ft_strlen(str));
+        write(2, "\n", 1);
+        
+        create_token_lst(tokens, T_WORD, str, 0); // Using T_WORD type for logical operators
+        *i += 2;
+    }
+}
+
 void	set_word_token(char *input, int *i, t_token **tokens)
 {
 	int	start;
 	int	flag;
+
+	// Check for logical operators first
+	if (input[*i] == '&' && input[*i + 1] == '&')
+	{
+		set_logical_operator_token(input, i, tokens);
+		return;
+	}
 
 	start = *i;
 	flag = ((*i > 0 && input[*i - 1] != ' ') || (*i > 1 && input[*i - 2] == '\\'));
@@ -46,8 +72,9 @@ void	set_word_token(char *input, int *i, t_token **tokens)
 	{
 		while (input[*i] && input[*i] > 32 && input[*i] < 127
 			&& input[*i] != '<' && input[*i] != '>' && input[*i] != '|'
-			&& input[*i] != '\'' && input[*i] != '\"'
-			&& input[*i] != '\\')
+			&& input[*i] != '\'' && input[*i] != '\"' && input[*i] != '\\'
+			// Also stop if we encounter a logical operator like &&
+			&& !(input[*i] == '&' && input[*i + 1] == '&'))
 		{
 			(*i)++;
 		}
@@ -114,7 +141,9 @@ t_token	*set_tokens(char *input, t_msh *msh)
 	
 	while (input[i] && !msh->parse_error)
 	{
-		if (input[i] != ' ' && input[i] != '<' && input[i] != '>'
+		if (input[i] == '&' && input[i + 1] == '&')
+			set_logical_operator_token(input, &i, &tokens);
+		else if (input[i] != ' ' && input[i] != '<' && input[i] != '>'
 			&& input[i] != '|' && input[i] != '\n' && input[i] != '\''
 			&& input[i] != '\"')
 			set_word_token(input, &i, &tokens);

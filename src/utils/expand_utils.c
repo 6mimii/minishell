@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 20:08:15 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/18 20:09:15 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,12 @@ char	*get_exp(char *line, int *i, t_msh *msh)
 	if (line[*i] == '}')
 		*i += 1;
 	ret = expand_var(var, msh, 0);
+	write(2, "Debug: Extracted variable: ", 26);
+	write(2, var, ft_strlen(var));
+	write(2, "\n", 1);
+	write(2, "Debug: Variable value: ", 23);
+	write(2, ret, ft_strlen(ret));
+	write(2, "\n", 1);
 	free(var);
 	return (ret);
 }

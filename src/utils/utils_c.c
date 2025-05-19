@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:47:53 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/19 10:29:18 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/20 01:17:00 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ char	**get_path(t_msh *msh)
 
 	if (!msh || !msh->envp)
 		return (NULL);
-	
-	// Usar getenv directamente como fallback
 	if (!msh->env)
 	{
 		path_env = getenv("PATH");
@@ -44,8 +42,6 @@ char	**get_path(t_msh *msh)
 		paths = ft_split(path_env, ':');
 		return (paths);
 	}
-	
-	// Usar la versión de la shell
 	path_env = get_env(msh, "PATH");
 	if (!path_env || path_env[0] == '\0')
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/19 10:29:23 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/20 01:15:49 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,15 @@
 
 extern int			g_signal;
 
-/* COLOR */
-# define RST "\033[0m" // Reset per tornare al colore normale
-# define RED "\033[1;31m" // Rosso brillante
-# define GRN "\033[1;32m" // Verde brillante
-# define YLW "\033[1;33m" // Giallo brillante
-# define BLU "\033[1;34m" // Blu brillante
-# define MGT "\033[1;35m" // Magenta brillante
-# define CYN "\033[1;36m" // Ciano brillante
-# define WIT "\033[1;37m" // Bianco brillante
+# define RST "\033[0m"
+# define RED "\033[1;31m"
+# define GRN "\033[1;32m"
+# define YLW "\033[1;33m"
+# define BLU "\033[1;34m"
+# define MGT "\033[1;35m"
+# define CYN "\033[1;36m"
+# define WIT "\033[1;37m"
 
-/* ERROR */
 # define UNEXPECTED_TOK "sintax error near unexpected token"
 # define UNEXPECTED_EOF "syntax error unexpected end of file"
 # define WRONG_Q "unexpected EOF while looking for matching `''"

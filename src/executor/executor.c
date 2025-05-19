@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:45:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/18 18:52:24 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,19 @@ int	is_builtin(t_msh *msh, t_cmd *cmd)
 	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
 		return (ft_exit(msh, cmd), 0);
 	else if (ft_strcmp(cmd->argv[0], "export") == 0)
-		return (ft_export(msh, cmd), 0);
+	{
+		ft_export(msh, cmd);
+		msh->state = 0; // Indicar éxito
+		return (0);
+	}
 	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
 		return (ft_pwd(msh, cmd), 0);
 	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
-		return (ft_unset(msh, cmd), 0);
+	{
+		ft_unset(msh, cmd);
+		msh->state = 0; // Indicar éxito
+		return (0);
+	}
 	else if (ft_strcmp(cmd->argv[0], "env") == 0)
 		return (ft_env(msh, cmd, cmd->argv[1]), 0);
 	return (1);
@@ -49,6 +57,7 @@ void	executor(t_msh *msh)
 	msh->path = get_path(msh);
 	setup_signals(msh);
 	g_signal = 1;
+	
 	if (msh->cmd_len == 1)
 		handle_single_command(msh);
 	else

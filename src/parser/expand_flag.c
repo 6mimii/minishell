@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_flag.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:04:25 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/18 19:04:27 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,15 @@ void	expand_flag(t_token *tok)
 			continue;
 		}
 		
+		// Debugging: Log the token content and type before processing
+		write(2, "Debug: Token before processing: ", 31);
+		write(2, aux->content, ft_strlen(aux->content));
+		write(2, " Type: ", 7);
+		char type[12];
+		sprintf(type, "%d", aux->type);
+		write(2, type, ft_strlen(type));
+		write(2, "\n", 1);
+		
 		aux->exp = 0;
 		if (aux->type == T_WORD || aux->type == T_DQ)
 		{
@@ -44,7 +53,17 @@ void	expand_flag(t_token *tok)
 				aux->exp = 2;
 			else if (check_home(aux->content) == 2)
 				aux->exp = 3;
-		}
+			}
+		
+		// Debugging: Log the token content and exp flag after processing
+		write(2, "Debug: Token after processing: ", 30);
+		write(2, aux->content, ft_strlen(aux->content));
+		write(2, " Exp: ", 6);
+		char exp[12];
+		sprintf(exp, "%d", aux->exp);
+		write(2, exp, ft_strlen(exp));
+		write(2, "\n", 1);
+		
 		aux = aux->next;
 	}
 	
