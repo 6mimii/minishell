@@ -103,6 +103,7 @@ src/executor/multiple_cmd.c \
 src/executor/pwd.c \
 src/executor/single_cmd.c \
 src/executor/unset.c \
+src/utils/expand_utils.c  \
 src/utils/utils_a.c \
 src/utils/utils_b.c \
 src/utils/utils_c.c \

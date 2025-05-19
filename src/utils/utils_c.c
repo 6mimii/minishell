@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils_c.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:47:53 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/18 18:56:50 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:29:18 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	safe_fork(pid_t *pid)
-{
-	*pid = fork();
-	if (*pid < 0)
-	{
-		error_handl("Fork error");
-		return ;
-	}
-}
 
 void	set_cmd_ind(t_cmd *cmd)
 {

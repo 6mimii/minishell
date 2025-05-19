@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/18 20:10:22 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:29:23 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strdup(const char *s1);
 size_t				ft_strlcpy(char *dst, const char *src, size_t dst_size);
 size_t				ft_strlen(const char *s);
-
 /////////////NODES//////////////
 void				add_node_back(t_token **lst, t_token *new);
 t_token				*new_node(char *content, int type, int flag);
