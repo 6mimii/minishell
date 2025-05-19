@@ -14,6 +14,9 @@
 
 int	is_builtin(t_msh *msh, t_cmd *cmd)
 {
+	if (!cmd || !cmd->argv || !cmd->argv[0])
+		return (0);
+		
 	if (ft_strcmp(cmd->argv[0], "cd") == 0)
 		return (ft_cd(msh, cmd), 0);
 	else if (ft_strcmp(cmd->argv[0], "echo") == 0)
@@ -37,6 +40,8 @@ void	executor(t_msh *msh)
 	int	saved_stdout;
 	int	fd_in;
 
+	if (!msh || !msh->cmd || !msh->cmd->argv || !msh->cmd->argv[0])
+		return;
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	set_cmd_ind(msh->cmd);
@@ -51,5 +56,13 @@ void	executor(t_msh *msh)
 	g_signal = 0;
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
 	setup_signals(msh);
+	// Clean up paths after execution
+	if (msh->path)
+	{
+		free_matrix(msh->path);
+		msh->path = NULL;
+	}
 }

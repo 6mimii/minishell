@@ -69,6 +69,7 @@ int	command_content(t_cmd *new, t_token *tok)
 				new->argv[i] = ft_strdup("");
 			if (!new->argv[i])
 				return (0);
+			i++; // Incrementar el índice después de añadir un argumento
 		}
 		aux = aux->next;
 	}

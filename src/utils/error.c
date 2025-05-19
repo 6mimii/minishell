@@ -19,13 +19,13 @@ void	error_msh(char *msg, t_msh *msh, int state)
 	msh->state = state;
 }
 
-/* void	error_files(char *name, char *msg)
+void	error_files(char *name, char *msg)
 {
 	ft_putstr_fd("Minishell: ", 2);
 	ft_putstr_fd(name, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(msg, 2);
-} */
+}
 
 void	error_and_exit(char *name, int state, t_msh *msh)
 {

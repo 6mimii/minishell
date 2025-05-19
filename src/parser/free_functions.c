@@ -6,17 +6,17 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:47:18 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/18 19:39:43 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/19 12:45:43 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	free_tokens(t_token **tokens)
+void	free_tokens(t_token **tokens)
 {
 	t_token	*aux;
 
-	if (!*tokens || !tokens)
+	if (!tokens || !*tokens)
 		return ;
 	while (*tokens)
 	{
@@ -44,7 +44,7 @@ void	free_commands(t_cmd **cmd)
 {
 	t_cmd	*aux;
 
-	if (!*cmd || !cmd)
+	if (!cmd || !*cmd)
 		return ;
 	while (*cmd)
 	{
@@ -68,6 +68,8 @@ void	free_msh(t_msh *msh)
 {
 	if (msh->tokens)
 		free_tokens(&msh->tokens);
+	if (msh->cmd)
+		free_commands(&msh->cmd);
 	if (msh->input)
 	{
 		free(msh->input);

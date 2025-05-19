@@ -83,12 +83,24 @@ void	set_heredoc(t_token **tok, t_cmd *new, t_msh *msh)
 	pid_t	pid;
 	int		fd;
 
+	if (!*tok || !(*tok)->next)
+	{
+		error_msh(UNEXPECTED_EOF, msh, 2);
+		new->error = 1;
+		return;
+	}
 	*tok = (*tok)->next;
 	if (new->error == 0)
 	{
 		if (new->fd_in > 2)
 			close(new->fd_in);
 		fd = open(".here_doc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd == -1)
+		{
+			error_files(".here_doc.tmp", strerror(errno));
+			new->error = 1;
+			return;
+		}
 		pid = fork();
 		if (pid == 0)
 		{
@@ -98,5 +110,6 @@ void	set_heredoc(t_token **tok, t_cmd *new, t_msh *msh)
 		else if (pid > 0)
 			wait_hd(*tok, new, msh, fd);
 	}
-	*tok = (*tok)->next;
+	if (*tok && (*tok)->next)
+		*tok = (*tok)->next;
 }

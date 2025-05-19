@@ -144,6 +144,7 @@ void				get_command(t_msh *msh);
 void				create_command_list(t_cmd **cmd, t_cmd *new);
 /////////////ENVIRONMENT//////////////
 t_env				*env_lst(char **envp);
+t_env				*create_env_lst(char **envp);
 ////////////////SET/////////////////
 void				set_outfile(t_token **tok, t_cmd *new, t_msh *msh);
 void				set_append(t_token **tok, t_cmd *new, t_msh *msh);
@@ -166,6 +167,9 @@ char				*get_word(char *s1, int *i);
 char				*get_exp(char *line, int *i, t_msh *msh);
 char				*expand_var(char *var, t_msh *msh, int len);
 ////////////////FREE/////////////////
+void				free_tokens(t_token **tokens);
+void				free_commands(t_cmd **cmd);
+void				free_matrix(char **matrix);
 void				free_msh(t_msh *msh);
 void				free_env(t_env *env);
 
@@ -195,6 +199,7 @@ void				ft_unset(t_msh *msh, t_cmd *cmd);
 void				handle_single_command(t_msh *msh);
 void				run_external_command(t_msh *msh, t_cmd *cmd, char **paths);
 char				*find_cmd(char **path, char *cmd, t_msh *msh);
+void				error_files(char *name, char *msg);
 
 /* Multiple cmd */
 void				multiple_cmds(t_msh *msh, int fd_in);

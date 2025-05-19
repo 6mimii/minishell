@@ -23,7 +23,7 @@ void	set_double_quote_token(char *line, int *i, t_token **tokens, t_msh *msh)
 	{
 		if (*i > 0 && line[*i - 1] != ' ')
 			flag = 1;
-		*i *= 1;
+		(*i)++;
 		while (line[*i] && line[*i] != '\"')
 			*i += 1;
 		if (line[*i] == '\"')
@@ -86,7 +86,7 @@ void	set_lower_token(char *line, int *i, t_token **tokens)
 		}
 		else
 		{
-			create_token_lst(tokens, T_DL, ft_strdup("<"), 0);
+			create_token_lst(tokens, T_L, ft_strdup("<"), 0);
 			*i += 1;
 		}
 	}

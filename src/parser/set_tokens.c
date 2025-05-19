@@ -37,8 +37,7 @@ void	set_word_token(char *input, int *i, t_token **tokens)
 	int	flag;
 
 	start = *i;
-	flag = (*i > 0 && input[*i - 1 != ' ' || (*i > 1 && input[*i
-				- 2] == '\\')]);
+	flag = ((*i > 0 && input[*i - 1] != ' ') || (*i > 1 && input[*i - 2] == '\\'));
 	if (input[*i] == '\\')
 	{
 		set_backslash_token(input, i, tokens, flag);
@@ -107,7 +106,13 @@ t_token	*set_tokens(char *input, t_msh *msh)
 
 	i = 0;
 	tokens = NULL;
-	while (input[i])
+	
+	// Debug
+	write(2, "Tokenizing input: ", 18);
+	write(2, input, ft_strlen(input));
+	write(2, "\n", 1);
+	
+	while (input[i] && !msh->parse_error)
 	{
 		if (input[i] != ' ' && input[i] != '<' && input[i] != '>'
 			&& input[i] != '|' && input[i] != '\n' && input[i] != '\''
@@ -121,8 +126,27 @@ t_token	*set_tokens(char *input, t_msh *msh)
 			set_pipe_token(input, &i, &tokens);
 		else if (input[i] == '\'')
 			set_quote_token(input, &i, &tokens, msh);
+		else if (input[i] == '\"')
+			set_double_quote_token(input, &i, &tokens, msh);
 		else if (input[i] == ' ' || input[i] == '\n')
 			i++;
 	}
+	
+	// Debug token count
+	{
+		int count = 0;
+		t_token *tmp = tokens;
+		char num[12];
+		
+		while (tmp) {
+			count++;
+			tmp = tmp->next;
+		}
+		write(2, "Token count: ", 13);
+		sprintf(num, "%d", count);
+		write(2, num, ft_strlen(num));
+		write(2, "\n", 1);
+	}
+	
 	return (tokens);
 }

@@ -19,11 +19,19 @@ char	*find_cmd(char **path, char *cmd, t_msh *msh)
 	char	*aux;
 
 	i = 0;
-	if (access(cmd, F_OK | X_OK) == 0)
-		return (ft_strdup(cmd));
+	(void)msh;
+	if (!cmd || cmd[0] == '\0')
+		return (NULL);
+	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') || 
+		(cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
+	{
+		if (access(cmd, F_OK | X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
 	if (!path)
-		error_and_exit(cmd, 127, msh);
-	while (path[i])
+		return (NULL);
+	while (path && path[i])
 	{
 		aux = ft_strjoin(path[i], "/");
 		cmd_joined = ft_strjoin(aux, cmd);
@@ -42,15 +50,56 @@ char	*find_cmd(char **path, char *cmd, t_msh *msh)
 void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 {
 	char	*full_path;
+	int		i;
 
-	if (!cmd->argv[0] || cmd->argv[0][0] == '\0')
+	if (!cmd || !cmd->argv || !cmd->argv[0] || cmd->argv[0][0] == '\0')
 	{
+		ft_putstr_fd("Minishell: command missing\n", 2);
 		free_and_exit("", msh, 0, false);
 	}
+	
+	// Debug
+	ft_putstr_fd("Command: ", 2);
+	ft_putendl_fd(cmd->argv[0], 2);
+	
+	// Check if argv is properly NULL-terminated
+	i = 0;
+	while (cmd->argv[i])
+	{
+		ft_putstr_fd("argv[", 2);
+		ft_putnbr_fd(i, 2);
+		ft_putstr_fd("]: ", 2);
+		ft_putendl_fd(cmd->argv[i], 2);
+		i++;
+	}
+	
+	// Debug environment variables
+	ft_putstr_fd("Environment check: ", 2);
+	if (!msh->envp)
+		ft_putendl_fd("envp is NULL", 2);
+	else
+		ft_putendl_fd("envp exists", 2);
+	
 	full_path = find_cmd(paths, cmd->argv[0], msh);
 	if (!full_path)
-		free_and_exit("Command not found", msh, 127, true);
-	execve(full_path, cmd->argv, msh->envp);
+	{
+		ft_putstr_fd("Minishell: ", 2);
+		ft_putstr_fd(cmd->argv[0], 2);
+		ft_putendl_fd(": command not found", 2);
+		free_and_exit("", msh, 127, false);
+	}
+	
+	ft_putstr_fd("Executing: ", 2);
+	ft_putendl_fd(full_path, 2);
+	
+	if (!msh->envp) {
+		// Fallback to system environment if our environment is NULL
+		extern char **environ;
+		execve(full_path, cmd->argv, environ);
+	} else {
+		execve(full_path, cmd->argv, msh->envp);
+	}
+	
 	free(full_path);
 	free_and_exit("execve failed", msh, EXIT_FAILURE, true);
 }
@@ -59,13 +108,44 @@ void	handle_single_command(t_msh *msh)
 {
 	pid_t	pid;
 
+	// Debug
+	write(2, "In handle_single_command\n", 25);
+	
+	if (!msh || !msh->cmd)
+	{
+		write(2, "Error: msh or cmd is NULL\n", 26);
+		return;
+	}
+	
 	if (msh->cmd->error)
-		return ;
+	{
+		write(2, "Cmd has error flag set\n", 23);
+		return;
+	}
+	
+	if (!msh->cmd->argv || !msh->cmd->argv[0])
+	{
+		write(2, "Cmd argv is NULL or empty\n", 26);
+		return;
+	}
+	
+	write(2, "Command argv[0]: ", 17);
+	write(2, msh->cmd->argv[0], ft_strlen(msh->cmd->argv[0]));
+	write(2, "\n", 1);
+	
 	if (is_builtin(msh, msh->cmd))
-		return ;
+	{
+		write(2, "Command is a builtin\n", 21);
+		return;
+	}
+	
+	write(2, "Forking for external command\n", 29);
 	pid = fork();
 	if (pid < 0)
+	{
+		write(2, "Fork failed\n", 12);
 		error_msh("Error creating pid", msh, 0);
+	}
 	if (pid == 0)
 	{
 		if (msh->cmd->fd_in != STDIN_FILENO)

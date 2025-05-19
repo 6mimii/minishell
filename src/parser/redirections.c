@@ -14,6 +14,12 @@
 
 void	set_outfile(t_token **tok, t_cmd *new, t_msh *msh)
 {
+	if (!*tok || !(*tok)->next)
+	{
+		error_msh(UNEXPECTED_EOF, msh, 2);
+		new->error = 1;
+		return;
+	}
 	*tok = (*tok)->next;
 	if (new->error == 0)
 	{
@@ -23,16 +29,23 @@ void	set_outfile(t_token **tok, t_cmd *new, t_msh *msh)
 				O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (new->fd_out == -1)
 		{
-			//error_files((*tok)->content, strerror(errno));
+			error_files((*tok)->content, strerror(errno));
 			new->error = 1;
 			msh->state = 1;
 		}
 	}
-	*tok = (*tok)->next;
+	if (*tok && (*tok)->next)
+		*tok = (*tok)->next;
 }
 
 void	set_infile(t_token **tok, t_cmd *new, t_msh *msh)
 {
+	if (!*tok || !(*tok)->next)
+	{
+		error_msh(UNEXPECTED_EOF, msh, 2);
+		new->error = 1;
+		return;
+	}
 	*tok = (*tok)->next;
 	if (new->error == 0)
 	{
@@ -41,16 +54,23 @@ void	set_infile(t_token **tok, t_cmd *new, t_msh *msh)
 		new->fd_in = open((*tok)->content, O_RDONLY);
 		if (new->fd_in == -1)
 		{
-			//error_files((*tok)->content, strerror(errno));
+			error_files((*tok)->content, strerror(errno));
 			new->error = 1;
 			msh->state = 1;
 		}
 	}
-	*tok = (*tok)->next;
+	if (*tok && (*tok)->next)
+		*tok = (*tok)->next;
 }
 
 void	set_append(t_token **tok, t_cmd *new, t_msh *msh)
 {
+	if (!*tok || !(*tok)->next)
+	{
+		error_msh(UNEXPECTED_EOF, msh, 2);
+		new->error = 1;
+		return;
+	}
 	*tok = (*tok)->next;
 	if (new->error == 0)
 	{
@@ -60,10 +80,11 @@ void	set_append(t_token **tok, t_cmd *new, t_msh *msh)
 				O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (new->fd_out == -1)
 		{
-			//error_files((*tok)->content, strerror(errno));
+			error_files((*tok)->content, strerror(errno));
 			new->error = 1;
 			msh->state = 1;
 		}
 	}
-	*tok = (*tok)->next;
+	if (*tok && (*tok)->next)
+		*tok = (*tok)->next;
 }

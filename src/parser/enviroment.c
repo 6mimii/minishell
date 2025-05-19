@@ -12,6 +12,21 @@
 
 #include "../minishell.h"
 
+static void	add_env_back(t_env **lst, t_env *new)
+{
+	t_env	*new_node;
+
+	if (*lst == NULL)
+	{
+		*lst = new;
+		return ;
+	}
+	new_node = *lst;
+	while (new_node->next != NULL)
+		new_node = new_node->next;
+	new_node->next = new;
+}
+
 static void	init_env_lst(t_env **lst, char **envp)
 {
 	t_env	*new;
@@ -34,11 +49,22 @@ static void	init_env_lst(t_env **lst, char **envp)
 			j++;
 		new->content = ft_substr(envp[i], x, (j - x));
 		new->next = NULL;
-		add_node_back((t_token **)lst, (t_token *)new);
+		add_env_back(lst, new);
 	}
 }
 
 t_env	*enviroment_lst(char **envp)
+{
+	t_env *env;
+
+	if (!envp || !*envp)
+		return (NULL);
+	env = NULL;
+	init_env_lst(&env, envp);
+	return (env);
+}
+
+t_env	*create_env_lst(char **envp)
 {
 	t_env *env;
 

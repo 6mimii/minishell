@@ -32,11 +32,26 @@ char	**get_path(t_msh *msh)
 	char	*path_env;
 	char	**paths;
 
-	(void)msh;
-	path_env = getenv("PATH");
-	if (!path_env)
+	if (!msh || !msh->envp)
+		return (NULL);
+	
+	// Usar getenv directamente como fallback
+	if (!msh->env)
+	{
+		path_env = getenv("PATH");
+		if (!path_env || path_env[0] == '\0')
+			return (NULL);
+		paths = ft_split(path_env, ':');
+		return (paths);
+	}
+	
+	// Usar la versión de la shell
+	path_env = get_env(msh, "PATH");
+	if (!path_env || path_env[0] == '\0')
 		return (NULL);
 	paths = ft_split(path_env, ':');
+	if (!paths)
+		return (NULL);
 	return (paths);
 }
 
@@ -56,7 +71,10 @@ void	wait_handler(t_msh *msh, pid_t pid)
 int	check_dollar(const char *str)
 {
 	int	i;
-
+	
+	if (!str)
+		return (0);
+		
 	i = 0;
 	while (str[i])
 	{

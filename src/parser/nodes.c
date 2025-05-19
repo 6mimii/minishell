@@ -32,11 +32,19 @@ t_token	*new_node(char *content, int type, int flag)
 	t_token	*new;
 
 	new = (t_token *)malloc(sizeof(t_token));
-	if (!new)
+	if (!new) {
+		free(content); // Free the content if we failed to allocate node
 		return (NULL);
-	new->content = ft_strdup(content);
+	}
+	
+	// Use the content directly instead of duplicating it again
+	new->content = content;
 	new->type = type;
 	new->flag = flag;
+	new->next = NULL; // Initialize next pointer to NULL
+	new->exp = 0;     // Initialize exp to 0
+	new->backslash = 0; // Initialize backslash to 0
+	
 	return (new);
 }
 
@@ -44,12 +52,29 @@ void	create_token_lst(t_token **tok, int type, char *content, int flag)
 {
 	t_token	*aux;
 
-	aux = new_node(content, type, flag);
-	if (!*tok)
+	if (!content) {
+		write(2, "Warning: Trying to create token with NULL content\n", 49);
+		return;
+	}
+	
+	if (!*tok) {
+		// Create the first node
 		*tok = new_node(content, type, flag);
+		if (!*tok) {
+			write(2, "Failed to create token node\n", 28);
+			free(content);
+			return;
+		}
+	}
 	else
 	{
+		// Add to existing list
 		aux = new_node(content, type, flag);
+		if (!aux) {
+			write(2, "Failed to create token node\n", 28);
+			free(content);
+			return;
+		}
 		add_node_back(tok, aux);
 	}
 }
