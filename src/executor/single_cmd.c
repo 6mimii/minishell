@@ -69,90 +69,87 @@ void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 	if (!msh->envp) {
 		// Fallback to system environment if our environment is NULL
 		extern char **environ;
-		execve(full_path, cmd->argv, environ);
+		if (execve(full_path, cmd->argv, environ) == -1) {
+			ft_putstr_fd("Minishell: ", 2);
+			ft_putstr_fd(cmd->argv[0], 2);
+			ft_putstr_fd(": ", 2);
+			ft_putendl_fd(strerror(errno), 2);
+			free(full_path);
+			free_and_exit("", msh, 126, false);
+		}
 	} else {
-		execve(full_path, cmd->argv, msh->envp);
+		if (execve(full_path, cmd->argv, msh->envp) == -1) {
+			ft_putstr_fd("Minishell: ", 2);
+			ft_putstr_fd(cmd->argv[0], 2);
+			ft_putstr_fd(": ", 2);
+			ft_putendl_fd(strerror(errno), 2);
+			free(full_path);
+			free_and_exit("", msh, 126, false);
+		}
 	}
 	
 	free(full_path);
 	free_and_exit("execve failed", msh, EXIT_FAILURE, true);
 }
 
+void handle_exit(t_msh *msh, t_cmd *cmd) {
+    int exit_code = 0;
+
+    if (cmd->argv[1]) {
+        int i = 0;
+        while (cmd->argv[1][i]) {
+            if (!ft_isdigit(cmd->argv[1][i])) {
+                ft_putstr_fd("Minishell: exit: numeric argument required\n", 2);
+                free_and_exit("", msh, 255, false);
+            }
+            i++;
+        }
+        if (cmd->argv[2]) {
+            ft_putstr_fd("Minishell: exit: too many arguments\n", 2);
+            msh->state = 1;
+            return;
+        }
+        exit_code = ft_atoi(cmd->argv[1]);
+    }
+    free_and_exit("", msh, exit_code, false);
+}
+
 void	handle_single_command(t_msh *msh)
 {
 	pid_t	pid;
 
-	// Debug
-	write(2, "In handle_single_command\n", 25);
-	
-	if (!msh || !msh->cmd)
-	{
-		write(2, "Error: msh or cmd is NULL\n", 26);
-		return;
-	}
-	
-	if (msh->cmd->error)
-	{
-		write(2, "Cmd has error flag set\n", 23);
-		return;
-	}
-	
-	if (!msh->cmd->argv || !msh->cmd->argv[0])
-	{
-		write(2, "Cmd argv is NULL or empty\n", 26);
-		return;
-	}
-	
-	write(2, "Command argv[0]: ", 17);
-	write(2, msh->cmd->argv[0], ft_strlen(msh->cmd->argv[0]));
-	write(2, "\n", 1);
-	
-	// Debugging: Log the command and arguments being processed
-	write(2, "Debug: Command being processed: ", 30);
-	write(2, msh->cmd->argv[0], ft_strlen(msh->cmd->argv[0]));
-	write(2, "\n", 1);
-	for (int i = 1; msh->cmd->argv[i]; i++) {
-		write(2, "Arg: ", 5);
-		write(2, msh->cmd->argv[i], ft_strlen(msh->cmd->argv[i]));
-		write(2, "\n", 1);
-	}
+    if (!msh || !msh->cmd)
+        return;
 
-	// Debugging: Log the command and arguments being passed to builtins
-	write(2, "Debug: Command: ", 15);
-	write(2, msh->cmd->argv[0], ft_strlen(msh->cmd->argv[0]));
-	write(2, "\n", 1);
-	for (int i = 1; msh->cmd->argv[i]; i++) {
-		write(2, "Arg: ", 5);
-		write(2, msh->cmd->argv[i], ft_strlen(msh->cmd->argv[i]));
-		write(2, "\n", 1);
-	}
+    if (msh->cmd->error)
+        return;
 
-	if (is_builtin(msh, msh->cmd) == 0) {
-		write(2, "Builtin executed successfully\n", 30);
-		msh->state = 0; // Indicar éxito en la ejecución del builtin
-		return;
-	}
-	
-	write(2, "Forking for external command\n", 29);
-	pid = fork();
-	if (pid < 0)
-	{
-		write(2, "Fork failed\n", 12);
-		error_msh("Error creating pid", msh, 0);
-	}
-	if (pid == 0)
-	{
-		if (msh->cmd->fd_in != STDIN_FILENO)
-		{
-			dup2(msh->cmd->fd_in, STDIN_FILENO);
-			close(msh->cmd->fd_in);
-		}
-		if (msh->cmd->fd_out != STDOUT_FILENO)
-		{
-			dup2(msh->cmd->fd_out, STDOUT_FILENO);
-			close(msh->cmd->fd_out);
-		}
-		run_external_command(msh, msh->cmd, msh->path);
-	}
-	wait_handler(msh, pid);
+    if (!msh->cmd->argv || !msh->cmd->argv[0])
+        return;
+
+    if (ft_strcmp(msh->cmd->argv[0], "exit") == 0) {
+        handle_exit(msh, msh->cmd);
+        return;
+    }
+
+    if (is_builtin(msh, msh->cmd) == 0) {
+        msh->state = 0;
+        return;
+    }
+
+    pid = fork();
+    if (pid < 0)
+        error_msh("Error creating pid", msh, 0);
+    if (pid == 0) {
+        if (msh->cmd->fd_in != STDIN_FILENO) {
+            dup2(msh->cmd->fd_in, STDIN_FILENO);
+            close(msh->cmd->fd_in);
+        }
+        if (msh->cmd->fd_out != STDOUT_FILENO) {
+            dup2(msh->cmd->fd_out, STDOUT_FILENO);
+            close(msh->cmd->fd_out);
+        }
+        run_external_command(msh, msh->cmd, msh->path);
+    }
+    wait_handler(msh, pid);
 }

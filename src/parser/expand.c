@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:42:47 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/21 17:45:23 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ char	*no_expand_var(char *s1, int *i)
 	int		len;
 	int		j;
 
+	if (!s1 || !i)
+		return (ft_strdup(""));
+
 	len = 1;
 	*i += 1;
 	j = *i + 1;
@@ -28,7 +31,7 @@ char	*no_expand_var(char *s1, int *i)
 	}
 	line = (char *)malloc(sizeof(char) * (len + 1));
 	if (!line)
-		return (NULL);
+		return (ft_strdup(""));
 	j = 0;
 	line[j++] = s1[*i];
 	*i += 1;
@@ -46,12 +49,16 @@ void	expand_content(t_token *tok, t_msh *msh)
 	int		i;
 	char	*line;
 	char	*aux;
+	char	*temp;
 
 	if (!tok || !tok->content || !msh)
 		return;
 
 	i = 0;
 	line = ft_strdup("");
+	if (!line)
+		return;
+		
 	while (tok->content[i])
 	{
 		if (tok->content[i] == '\\')
@@ -65,9 +72,25 @@ void	expand_content(t_token *tok, t_msh *msh)
 			aux = get_exp(tok->content, &i, msh);
 		else
 			aux = get_word(tok->content, &i);
+			
+		if (!aux)
+		{
+			free(line);
+			return;
+		}
+		
+		temp = line;
 		line = ft_strjoin(line, aux);
+		free(temp);
+		free(aux);
+		
+		if (!line)
+			return;
 	}
-	free(tok->content);
+	
+	if (tok->content)
+		free(tok->content);
+	
 	tok->content = ft_strdup(line);
 	free(line);
 }
@@ -97,7 +120,10 @@ static void	expand_home(t_token *tok, t_msh *msh)
 	}
 	if (!line)
 		line = ft_strdup("");
-	free(tok->content);
+		
+	if (tok->content)
+		free(tok->content);
+		
 	tok->content = ft_strdup(line);
 	free(line);
 }
@@ -113,14 +139,21 @@ static void	expand_both(t_token *tok, t_msh *msh)
 	aux = ft_strdup(&tok->content[1]);
 	if (!aux)
 		return;
+		
 	expand_home(tok, msh);
+	
 	home = ft_strdup(tok->content);
 	if (!home)
+	{
+		free(aux);
 		return;
-	free(tok->content);
+	}
+	
+	if (tok->content)
+		free(tok->content);
+		
 	tok->content = ft_strjoin(home, aux);
-	if (!tok->content)
-		return;
+	
 	free(home);
 	free(aux);
 }
@@ -149,6 +182,7 @@ void	expand_tokens(t_token **tokens, t_msh *msh)
 			expand_home(tmp, msh);
 		else if (tmp->exp == 3)
 			expand_both(tmp, msh);
+		
 		if (tmp)
 			tmp = tmp->next;
 	}

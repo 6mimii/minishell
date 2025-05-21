@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:22:03 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/05/18 18:54:06 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:46:03 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	ft_strcmp(char *s1, char *s2)
 		return (-1);
 	if (!s2)
 		return (1);
-		
 	i = 0;
 	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;

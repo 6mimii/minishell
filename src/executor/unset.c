@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:50:08 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/21 17:45:23 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,38 +48,35 @@ static int	count_env_nodes(t_env *env)
 ** Elimina una variable de entorno de la lista enlazada
 ** Devuelve 1 si se encontró y eliminó la variable, 0 si no
 */
-static int	delete_env_var(t_msh *msh, char *var)
-{
-	t_env	*curr;
-	t_env	*prev;
+static int delete_env_var(t_msh *msh, char *var) {
+    t_env *curr;
+    t_env *prev;
 
-	if (!msh->env || !var)
-		return (0);
-	
-	prev = NULL;
-	curr = msh->env;
-	
-	// Caso especial: el primer nodo es el que buscamos
-	if (curr && ft_strcmp(curr->type, var) == 0)
-	{
-		msh->env = curr->next;
-		free_env_node(curr);
-		return (1);
-	}
-	
-	// Buscar en el resto de la lista
-	while (curr)
-	{
-		if (ft_strcmp(curr->type, var) == 0)
-		{
-			prev->next = curr->next;
-			free_env_node(curr);
-			return (1);
-		}
-		prev = curr;
-		curr = curr->next;
-	}
-	return (0);
+    if (!msh->env || !var)
+        return (0);
+
+    prev = NULL;
+    curr = msh->env;
+
+    // Caso especial: el primer nodo es el que buscamos
+    if (curr && ft_strcmp(curr->type, var) == 0) {
+        msh->env = curr->next;
+        free_env_node(curr);
+        return (1);
+    }
+
+    // Buscar en el resto de la lista
+    while (curr) {
+        if (ft_strcmp(curr->type, var) == 0) {
+            if (prev)
+                prev->next = curr->next;
+            free_env_node(curr);
+            return (1);
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+    return (0);
 }
 
 /*

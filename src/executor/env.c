@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:48:31 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/01 16:24:03 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:45:34 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@ void	add_env(t_msh *msh, char *var, char *content)
 {
 	t_env	*aux;
 
+	if (!msh->env)
+	{
+		msh->env = malloc(sizeof(t_env));
+		if (!msh->env)
+			return ;
+		msh->env->type = ft_strdup(var);
+		msh->env->content = content ? ft_strdup(content) : NULL;
+		msh->env->next = NULL;
+		return ;
+	}
 	aux = msh->env;
 	while (aux->next)
 		aux = aux->next;
@@ -24,10 +34,7 @@ void	add_env(t_msh *msh, char *var, char *content)
 		return ;
 	aux = aux->next;
 	aux->type = ft_strdup(var);
-	if (content)
-		aux->content = ft_strdup(content);
-	else
-		aux->content = NULL;
+	aux->content = content ? ft_strdup(content) : NULL;
 	aux->next = NULL;
 }
 

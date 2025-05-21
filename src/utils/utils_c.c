@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_c.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:47:53 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/20 01:17:00 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/21 17:46:25 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,9 @@ void	wait_handler(t_msh *msh, pid_t pid)
 int	check_dollar(const char *str)
 {
 	int	i;
-	
+
 	if (!str)
 		return (0);
-		
 	i = 0;
 	while (str[i])
 	{

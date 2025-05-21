@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/20 01:15:49 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/21 17:45:23 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ typedef struct s_msh
 	char			**envp;
 	char			**path;
 	int				parse_error;
+	int				exit_requested;  // Flag para indicar si se debe salir
+	int				exit_code;       // Código de salida a usar
 	struct s_cmd	*cmd;
 	struct s_token	*tokens;
 	struct s_env	*env;
@@ -192,6 +194,7 @@ void				ft_exit(t_msh *msh, t_cmd *cmd);
 void				ft_cd(t_msh *msh, t_cmd *cmd);
 void				ft_export(t_msh *msh, t_cmd *cmd);
 void				ft_unset(t_msh *msh, t_cmd *cmd);
+
 
 /* One command */
 void				handle_single_command(t_msh *msh);
