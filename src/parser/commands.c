@@ -6,19 +6,17 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:39:35 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/21 00:39:44 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// Function to check if a token is a logical operator (like &&)
 static int is_logical_operator(t_token *token)
 {
     if (!token || !token->content)
         return 0;
     
-    // Check for logical operators
     if (ft_strcmp(token->content, "&&") == 0)
         return 1;
     
@@ -60,13 +58,13 @@ int	get_command_len(t_token *token)
 			|| aux->type == T_DL)
 		{
 			if (aux->next)
-				aux = aux->next; // Saltar el token de redirección y su argumento
+				aux = aux->next;
 			else
 				break;
 		}
 		else
 		{
-			len++; // Contar solo tokens de palabras (comandos/argumentos)
+			len++;
 		}
 		if (aux)
 			aux = aux->next;
@@ -111,7 +109,6 @@ static void	set_cmd(t_msh *msh, t_token **tokens)
 	msh->cmd_len += 1;
 	create_command_list(&msh->cmd, new_command);
 	
-	// Skip tokens until we reach a pipe or logical operator or the end
 	while (*tokens && (*tokens)->type != T_PIPE && !is_logical_operator(*tokens)) {
 		*tokens = (*tokens)->next;
 	}

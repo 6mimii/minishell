@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:50:08 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/21 00:49:04 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ static int	delete_env_var(t_msh *msh, char *var)
 	prev = NULL;
 	curr = msh->env;
 	
-	// Caso especial: el primer nodo es el que buscamos
 	if (curr && ft_strcmp(curr->type, var) == 0)
 	{
 		msh->env = curr->next;
@@ -67,7 +66,6 @@ static int	delete_env_var(t_msh *msh, char *var)
 		return (1);
 	}
 	
-	// Buscar en el resto de la lista
 	while (curr)
 	{
 		if (ft_strcmp(curr->type, var) == 0)
@@ -79,12 +77,10 @@ static int	delete_env_var(t_msh *msh, char *var)
 		prev = curr;
 		curr = curr->next;
 	}
+	
 	return (0);
 }
 
-/*
-** Crea un nuevo array de strings para el entorno a partir de la lista enlazada
-*/
 static char	**create_envp_array(t_msh *msh)
 {
 	int		env_count;
@@ -102,7 +98,6 @@ static char	**create_envp_array(t_msh *msh)
 	curr = msh->env;
 	while (curr)
 	{
-		// Formato: "type=content"
 		if (curr->content)
 		{
 			tmp = ft_strjoin(curr->type, "=");
@@ -125,7 +120,6 @@ static char	**create_envp_array(t_msh *msh)
 		}
 		else
 		{
-			// Para variables sin contenido
 			new_envp[i] = ft_strdup(curr->type);
 		}
 		i++;
@@ -135,45 +129,60 @@ static char	**create_envp_array(t_msh *msh)
 	return (new_envp);
 }
 
-/*
-** Actualiza el array de entorno después de modificar la lista enlazada
-** Implementación mejorada para una gestión de memoria más segura
-*/
 static int	update_envp_array(t_msh *msh)
 {
 	char	**new_envp;
 
-	// Primero creamos el nuevo array
 	new_envp = create_envp_array(msh);
 	if (!new_envp)
 		return (0);
-
-	// Usamos un enfoque más seguro:
-	// 1. Primero liberar el array antiguo sin tocar los strings
-	if (msh->envp)
-	{
-		// 2. Liberamos todos los strings antiguos
-		int i = 0;
-		while (msh->envp[i])
-		{
-			if (msh->envp[i])
-				free(msh->envp[i]);
-			i++;
-		}
-		// 3. Finalmente liberamos el array antiguo
-		free(msh->envp);
-	}
-
-	// 4. Asignamos el nuevo array
+	
 	msh->envp = new_envp;
 	
 	return (1);
 }
 
-/*
-** Implementación del comando unset
-** Elimina una o más variables del entorno
-*/
+static void add_to_unset_list(t_msh *msh, char *var)
+{
+    int i;
+    int len;
+    char **new_list;
+    
+    if (msh->unset_vars)
+    {
+        i = 0;
+        while (msh->unset_vars[i])
+        {
+            if (ft_strcmp(msh->unset_vars[i], var) == 0)
+                return;
+            i++;
+        }
+        len = i;
+    }
+    else
+        len = 0;
+    
+    new_list = (char **)malloc(sizeof(char *) * (len + 2));
+    if (!new_list)
+        return;
+        
+    for (i = 0; i < len; i++)
+        new_list[i] = ft_strdup(msh->unset_vars[i]);
+        
+    new_list[len] = ft_strdup(var);
+    new_list[len + 1] = NULL;
+    
+    if (msh->unset_vars)
+    {
+        i = 0;
+        while (msh->unset_vars[i])
+            free(msh->unset_vars[i++]);
+        free(msh->unset_vars);
+    }
+    
+    msh->unset_vars = new_list;
+}
+
 void	ft_unset(t_msh *msh, t_cmd *cmd)
 {
 	int	i;
@@ -190,18 +199,21 @@ void	ft_unset(t_msh *msh, t_cmd *cmd)
 	while (cmd->argv[i])
 	{
 		if (delete_env_var(msh, cmd->argv[i]))
+		{
 			changed = 1;
+			add_to_unset_list(msh, cmd->argv[i]);
+		}
 		i++;
 	}
 	
-	// Solo actualizamos el array de entorno si se eliminó alguna variable
 	if (changed)
 	{
 		if (!update_envp_array(msh))
-			msh->state = 1; // Error al actualizar el entorno
+			msh->state = 1;
 		else
-			msh->state = 0; // Sin errores
+			msh->state = 0;
 	}
 	else
 		msh->state = 0;
 }
+

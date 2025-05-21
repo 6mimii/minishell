@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/20 01:15:49 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/21 00:12:13 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ typedef struct s_msh
 	struct s_cmd	*cmd;
 	struct s_token	*tokens;
 	struct s_env	*env;
+	char            **unset_vars;  // Lista de variables eliminadas con unset
 }					t_msh;
 
 typedef struct s_env

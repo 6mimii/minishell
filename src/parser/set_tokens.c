@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 19:11:58 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/21 00:49:20 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,12 @@ static void	set_backslash_token(char *input, int *i, t_token **tokens, int flag)
 	*i += 1;
 }
 
-// New function to handle logical operators like &&
 void set_logical_operator_token(char *line, int *i, t_token **tokens)
 {
     if (line[*i] && line[*i + 1] && line[*i] == '&' && line[*i + 1] == '&')
     {
-        // Debugging: Log logical operators detection
-        write(2, "Debug: Found logical operator && in tokenization\n", 48);
-        
         char *str = ft_strdup("&&");
-        // Debugging: Log created token
-        write(2, "Debug: Creating logical operator token: ", 39);
-        write(2, str, ft_strlen(str));
-        write(2, "\n", 1);
-        
-        create_token_lst(tokens, T_WORD, str, 0); // Using T_WORD type for logical operators
+        create_token_lst(tokens, T_WORD, str, 0);
         *i += 2;
     }
 }
@@ -55,7 +46,6 @@ void	set_word_token(char *input, int *i, t_token **tokens)
 	int	start;
 	int	flag;
 
-	// Check for logical operators first
 	if (input[*i] == '&' && input[*i + 1] == '&')
 	{
 		set_logical_operator_token(input, i, tokens);
@@ -134,11 +124,6 @@ t_token	*set_tokens(char *input, t_msh *msh)
 	i = 0;
 	tokens = NULL;
 	
-	// Debug
-	write(2, "Tokenizing input: ", 18);
-	write(2, input, ft_strlen(input));
-	write(2, "\n", 1);
-	
 	while (input[i] && !msh->parse_error)
 	{
 		if (input[i] == '&' && input[i + 1] == '&')
@@ -159,22 +144,6 @@ t_token	*set_tokens(char *input, t_msh *msh)
 			set_double_quote_token(input, &i, &tokens, msh);
 		else if (input[i] == ' ' || input[i] == '\n')
 			i++;
-	}
-	
-	// Debug token count
-	{
-		int count = 0;
-		t_token *tmp = tokens;
-		char num[12];
-		
-		while (tmp) {
-			count++;
-			tmp = tmp->next;
-		}
-		write(2, "Token count: ", 13);
-		sprintf(num, "%d", count);
-		write(2, num, ft_strlen(num));
-		write(2, "\n", 1);
 	}
 	
 	return (tokens);

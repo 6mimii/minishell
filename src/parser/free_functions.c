@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:47:18 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/19 12:45:43 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/21 00:12:13 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	free_commands(t_cmd **cmd)
 
 void	free_msh(t_msh *msh)
 {
+	int i;
+	
 	if (msh->tokens)
 		free_tokens(&msh->tokens);
 	if (msh->cmd)
@@ -80,6 +82,17 @@ void	free_msh(t_msh *msh)
 		free_matrix(msh->path);
 		msh->path = NULL;
 	}
+	
+	// Liberar la lista de variables eliminadas
+	if (msh->unset_vars)
+	{
+		i = 0;
+		while (msh->unset_vars[i])
+			free(msh->unset_vars[i++]);
+		free(msh->unset_vars);
+		msh->unset_vars = NULL;
+	}
+	
 	msh->cmd_len = 0;
 	msh->parse_error = 0;
 }

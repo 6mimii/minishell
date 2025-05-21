@@ -1,0 +1,6 @@
+export PRUEBA=valor
+echo $PRUEBA
+unset PRUEBA
+echo $PRUEBA
+echo '$USER'
+echo "$USER"

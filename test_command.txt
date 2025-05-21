@@ -1,1 +1,1 @@
-echo 'mimi-notebook'
+echo "El usuario es $USER"

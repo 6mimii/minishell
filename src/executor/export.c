@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:49:05 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/21 00:37:31 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,36 +83,57 @@ static void	add_vars(t_msh *msh, char *str)
 
 static int	parse_export(t_msh *msh, char *line)
 {
-	if (!ft_isalpha(line[0]) && line[0] != '_') {
+	int	i;
+	
+	if (!ft_isalpha(line[0]) && line[0] != '_') 
+	{
 		write(2, "Error: Invalid start character\n", 30);
 		return (error_msh(EXPORT, msh, 1), 0);
 	}
-	for (int i = 0; line[i] && line[i] != '='; i++) {
-		if (!ft_isalnum(line[i]) && line[i] != '_') {
+	
+	i = 0;
+	while (line[i] && line[i] != '=') 
+	{
+		if (!ft_isalnum(line[i]) && line[i] != '_') 
+		{
 			write(2, "Error: Invalid character in variable name\n", 40);
 			return (error_msh(EXPORT, msh, 1), 0);
 		}
+		i++;
 	}
 	return (1);
 }
 
 void	ft_export(t_msh *msh, t_cmd *cmd)
 {
-	if (!cmd->argv[1]) {
+	int	i;
+	
+	if (!cmd->argv[1]) 
+	{
 		print_export(msh->env, cmd->fd_out);
 		return;
 	}
-	for (int i = 1; cmd->argv[i]; i++) {
-		if (!parse_export(msh, cmd->argv[i])) {
-			msh->state = 1; // Indicar error
+	
+	i = 1;
+	while (cmd->argv[i]) 
+	{
+		if (!parse_export(msh, cmd->argv[i])) 
+		{
+			msh->state = 1;
+			i++;
 			continue;
 		}
-		if (ft_strchr(cmd->argv[i], '=')) {
+		if (ft_strchr(cmd->argv[i], '=')) 
+		{
 			add_vars(msh, cmd->argv[i]);
-		} else {
-			if (!get_env_type(msh, cmd->argv[i])) {
+		} 
+		else 
+		{
+			if (!get_env_type(msh, cmd->argv[i])) 
+			{
 				add_env(msh, cmd->argv[i], NULL);
 			}
 		}
+		i++;
 	}
 }
