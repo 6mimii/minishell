@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:47 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/21 18:14:33 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:16:12 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void	init_msh(char **envp, t_msh *msh)
 	msh->cmd_len = 0;
 	msh->parse_error = 0;
 	msh->state = 0;
-	msh->exit_requested = 0; // Inicializar a falso
-	msh->exit_code = 0;      // Inicializar a 0
+	msh->exit_requested = 0;
+	msh->exit_code = 0;
 	msh->cmd = NULL;
 	msh->tokens = NULL;
 	msh->path = NULL;
