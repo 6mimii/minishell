@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_c.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:47:53 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/21 17:46:25 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/22 02:02:10 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,20 @@ int	check_dollar(const char *str)
 		i++;
 	}
 	return (0);
+}
+
+int	is_only_spaces(char *str)
+{
+	int	i;
+
+	if (!str)
+		return (1);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != ' ' && str[i] != '\t')
+			return (0);
+		i++;
+	}
+	return (1);
 }

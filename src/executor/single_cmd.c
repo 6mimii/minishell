@@ -51,10 +51,15 @@ void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 {
 	char	*full_path;
 
-	if (!cmd || !cmd->argv || !cmd->argv[0] || cmd->argv[0][0] == '\0')
+	if (!cmd || !cmd->argv || !cmd->argv[0] || cmd->argv[0][0] == '\0' || is_only_spaces(cmd->argv[0]))
 	{
-		ft_putstr_fd("Minishell: command missing\n", 2);
-		free_and_exit("", msh, 0, false);
+		if (!cmd->argv || !cmd->argv[0] || cmd->argv[0][0] == '\0' || is_only_spaces(cmd->argv[0]))
+			free_and_exit("", msh, 0, false);
+		else
+		{
+			ft_putstr_fd("Minishell: command missing\n", 2);
+			free_and_exit("", msh, 0, false);
+		}
 	}
 	
 	full_path = find_cmd(paths, cmd->argv[0], msh);
@@ -67,7 +72,6 @@ void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 	}
 	
 	if (!msh->envp) {
-		// Fallback to system environment if our environment is NULL
 		extern char **environ;
 		if (execve(full_path, cmd->argv, environ) == -1) {
 			ft_putstr_fd("Minishell: ", 2);
@@ -124,7 +128,7 @@ void	handle_single_command(t_msh *msh)
     if (msh->cmd->error)
         return;
 
-    if (!msh->cmd->argv || !msh->cmd->argv[0])
+    if (!msh->cmd->argv || !msh->cmd->argv[0] || is_only_spaces(msh->cmd->argv[0]))
         return;
 
     if (ft_strcmp(msh->cmd->argv[0], "exit") == 0) {

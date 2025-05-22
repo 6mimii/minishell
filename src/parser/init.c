@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:47 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/21 18:16:12 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/22 02:02:10 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,26 @@ void	init_msh(char **envp, t_msh *msh)
 
 void	get_input(t_msh *msh)
 {
+	g_sigint_received = 0;
+	g_signal = 0;
+	setup_signals(msh);
 	msh->input = readline("Mimishell% ");
 	if (!msh->input)
 		ctrl_d();
 	while (msh->input)
 	{
-		if (msh->input[0] == '\0' || is_only_whitespace(msh->input))
+		if (g_sigint_received)
+		{
+			g_sigint_received = 0;
 			free(msh->input);
-		else
+			msh->input = NULL;
+		}
+		else if (msh->input && (msh->input[0] == '\0' || is_only_whitespace(msh->input)))
+		{
+			free(msh->input);
+			msh->input = NULL;
+		}
+		else if (msh->input)
 		{
 			add_history(msh->input);
 			msh->tokens = set_tokens(msh->input, msh);
@@ -70,16 +82,16 @@ void	get_input(t_msh *msh)
 				if (msh->cmd)
 				{
 					executor(msh);
-					// Verifica si se ha solicitado salir
 					if (msh->exit_requested)
 					{
 						free_msh(msh);
 						exit(msh->exit_code);
+						}
 					}
 				}
-			}
+			free(msh->input);
+			msh->input = NULL;
 		}
-		// Limpia estructuras de comandos y tokens antes de leer la siguiente entrada
 		if (msh->cmd)
 		{
 			free_commands(&msh->cmd);
@@ -89,6 +101,9 @@ void	get_input(t_msh *msh)
 		{
 			free_tokens(&msh->tokens);
 		}
+		g_sigint_received = 0;
+		g_signal = 0;
+		setup_signals(msh);
 		msh->input = readline("Mimishell% ");
 		if (!msh->input)
 			ctrl_d();

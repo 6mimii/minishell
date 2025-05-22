@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/21 17:45:23 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/22 01:56:04 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <unistd.h>
 
 extern int			g_signal;
+extern volatile sig_atomic_t	g_sigint_received;
 
 # define RST "\033[0m"
 # define RED "\033[1;31m"
@@ -210,6 +211,7 @@ char				**get_path(t_msh *msh);
 void				set_cmd_ind(t_cmd *cmd);
 void				wait_handler(t_msh *msh, pid_t pid);
 void				free_and_exit_ex(t_msh *msh);
+int					is_only_spaces(char *str);
 
 /* Errors */
 void				error_msh(char *msg, t_msh *msh, int state);
