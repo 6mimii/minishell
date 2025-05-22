@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tanselmo <tanselmo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 15:16:33 by tanselmo          #+#    #+#             */
-/*   Updated: 2023/11/30 11:32:35 by tanselmo         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:40:00 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,3 @@ int	ft_isascii(int c)
 	}
 	return (0);
 }
-
-/* int	main()
-{
-	int	c;
-	
-	c = 128;
-	printf("%d\n", ft_isascii(c));
-	return (0);
-} */

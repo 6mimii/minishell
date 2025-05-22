@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_tokens.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 19:11:58 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/05/21 17:45:23 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/23 01:30:21 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,12 @@ static void	set_backslash_token(char *input, int *i, t_token **tokens, int flag)
 	*i += 1;
 }
 
-// New function to handle logical operators like &&
 void set_logical_operator_token(char *line, int *i, t_token **tokens)
 {
     if (line[*i] && line[*i + 1] && line[*i] == '&' && line[*i + 1] == '&')
     {
         char *str = ft_strdup("&&");
-        create_token_lst(tokens, T_WORD, str, 0); // Using T_WORD type for logical operators
+        create_token_lst(tokens, T_WORD, str, 0);
         *i += 2;
     }
 }
@@ -47,7 +46,6 @@ void	set_word_token(char *input, int *i, t_token **tokens)
 	int	start;
 	int	flag;
 
-	// Check for logical operators first
 	if (input[*i] == '&' && input[*i + 1] == '&')
 	{
 		set_logical_operator_token(input, i, tokens);
@@ -65,7 +63,6 @@ void	set_word_token(char *input, int *i, t_token **tokens)
 		while (input[*i] && input[*i] > 32 && input[*i] < 127
 			&& input[*i] != '<' && input[*i] != '>' && input[*i] != '|'
 			&& input[*i] != '\'' && input[*i] != '\"' && input[*i] != '\\'
-			// Also stop if we encounter a logical operator like &&
 			&& !(input[*i] == '&' && input[*i + 1] == '&'))
 		{
 			(*i)++;
@@ -90,6 +87,25 @@ int	check_pipes(t_msh *msh, t_token *token, int *flag)
 	return (1);
 }
 
+static int	validate_token_type(t_token *aux, t_msh *msh)
+{
+	if (aux->type != T_WORD && aux->type != T_Q && aux->type != T_DQ
+		&& aux->type != T_PIPE)
+	{
+		if (!aux->next)
+			return (error_msh(UNEXPECTED_EOF, msh, 2), 0);
+		if (aux->next->type != T_WORD && aux->next->type != T_Q
+			&& aux->next->type != T_DQ)
+			return (error_msh(UNEXPECTED_TOK, msh, 127), 0);
+	}
+	else if (aux->type == T_WORD)
+	{
+		if (!aux->next && aux->flag == 2)
+			return (error_msh(UNEXPECTED_EOF, msh, 2), 0);
+	}
+	return (1);
+}
+
 int	check_tokens(t_token **tokens, t_msh *msh, int flag)
 {
 	t_token	*aux;
@@ -99,23 +115,33 @@ int	check_tokens(t_token **tokens, t_msh *msh, int flag)
 	{
 		if (check_pipes(msh, aux, &flag) == 0)
 			return (0);
-		else if (aux->type != T_WORD && aux->type != T_Q && aux->type != T_DQ
-			&& aux->type != T_PIPE)
-		{
-			if (!aux->next)
-				return (error_msh(UNEXPECTED_EOF, msh, 2), 0);
-			if (aux->next->type != T_WORD && aux->next->type != T_Q
-				&& aux->next->type != T_DQ)
-				return (error_msh(UNEXPECTED_TOK, msh, 127), 0);
-		}
-		else if (aux->type == T_WORD)
-		{
-			if (!aux->next && aux->flag == 2)
-				return (error_msh(UNEXPECTED_EOF, msh, 2), 0);
-		}
+		if (validate_token_type(aux, msh) == 0)
+			return (0);
 		aux = aux->next;
 	}
 	return (1);
+}
+
+static void	process_input_character(char *input, int *i, t_token **tokens, t_msh *msh)
+{
+	if (input[*i] == '&' && input[*i + 1] == '&')
+		set_logical_operator_token(input, i, tokens);
+	else if (input[*i] != ' ' && input[*i] != '<' && input[*i] != '>'
+		&& input[*i] != '|' && input[*i] != '\n' && input[*i] != '\''
+		&& input[*i] != '\"')
+		set_word_token(input, i, tokens);
+	else if (input[*i] == '<')
+		set_lower_token(input, i, tokens);
+	else if (input[*i] == '>')
+		set_greather_token(input, i, tokens);
+	else if (input[*i] == '|')
+		set_pipe_token(input, i, tokens);
+	else if (input[*i] == '\'')
+		set_quote_token(input, i, tokens, msh);
+	else if (input[*i] == '\"')
+		set_double_quote_token(input, i, tokens, msh);
+	else if (input[*i] == ' ' || input[*i] == '\n')
+		(*i)++;
 }
 
 t_token	*set_tokens(char *input, t_msh *msh)
@@ -127,26 +153,7 @@ t_token	*set_tokens(char *input, t_msh *msh)
 	tokens = NULL;
 	
 	while (input[i] && !msh->parse_error)
-	{
-		if (input[i] == '&' && input[i + 1] == '&')
-			set_logical_operator_token(input, &i, &tokens);
-		else if (input[i] != ' ' && input[i] != '<' && input[i] != '>'
-			&& input[i] != '|' && input[i] != '\n' && input[i] != '\''
-			&& input[i] != '\"')
-			set_word_token(input, &i, &tokens);
-		else if (input[i] == '<')
-			set_lower_token(input, &i, &tokens);
-		else if (input[i] == '>')
-			set_greather_token(input, &i, &tokens);
-		else if (input[i] == '|')
-			set_pipe_token(input, &i, &tokens);
-		else if (input[i] == '\'')
-			set_quote_token(input, &i, &tokens, msh);
-		else if (input[i] == '\"')
-			set_double_quote_token(input, &i, &tokens, msh);
-		else if (input[i] == ' ' || input[i] == '\n')
-			i++;
-	}
+		process_input_character(input, &i, &tokens, msh);
 	
 	return (tokens);
 }

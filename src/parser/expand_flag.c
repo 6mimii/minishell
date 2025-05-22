@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_flag.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:04:25 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/21 17:45:23 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/23 01:18:50 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ void	expand_flag(t_token *tok)
 				aux->exp = 2;
 			else if (check_home(aux->content) == 2)
 				aux->exp = 3;
+		}
+		else if (aux->type == T_Q) 
+		{
+			aux->exp = 0;
 		}
 		
 		aux = aux->next;

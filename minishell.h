@@ -6,10 +6,9 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/22 01:56:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/23 00:14:18 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -26,6 +25,11 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+extern char *rl_line_buffer;
+extern void rl_free(void *mem);
+extern rl_completion_func_t *rl_attempted_completion_function;
+extern rl_compentry_func_t *rl_completion_entry_function;
 
 extern int			g_signal;
 extern volatile sig_atomic_t	g_sigint_received;
@@ -90,8 +94,8 @@ typedef struct s_msh
 	char			**envp;
 	char			**path;
 	int				parse_error;
-	int				exit_requested;  // Flag para indicar si se debe salir
-	int				exit_code;       // Código de salida a usar
+	int				exit_requested;
+	int				exit_code;
 	struct s_cmd	*cmd;
 	struct s_token	*tokens;
 	struct s_env	*env;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nodes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:21:28 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/18 19:16:19 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:40:00 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,16 @@ t_token	*new_node(char *content, int type, int flag)
 
 	new = (t_token *)malloc(sizeof(t_token));
 	if (!new) {
-		free(content); // Free the content if we failed to allocate node
+		free(content);
 		return (NULL);
 	}
 	
-	// Use the content directly instead of duplicating it again
 	new->content = content;
 	new->type = type;
 	new->flag = flag;
-	new->next = NULL; // Initialize next pointer to NULL
-	new->exp = 0;     // Initialize exp to 0
-	new->backslash = 0; // Initialize backslash to 0
+	new->next = NULL;
+	new->exp = 0;
+	new->backslash = 0;
 	
 	return (new);
 }
@@ -58,7 +57,6 @@ void	create_token_lst(t_token **tok, int type, char *content, int flag)
 	}
 	
 	if (!*tok) {
-		// Create the first node
 		*tok = new_node(content, type, flag);
 		if (!*tok) {
 			write(2, "Failed to create token node\n", 28);
@@ -68,7 +66,6 @@ void	create_token_lst(t_token **tok, int type, char *content, int flag)
 	}
 	else
 	{
-		// Add to existing list
 		aux = new_node(content, type, flag);
 		if (!aux) {
 			write(2, "Failed to create token node\n", 28);

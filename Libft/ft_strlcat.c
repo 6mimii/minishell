@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tanselmo <tanselmo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 15:16:00 by tanselmo          #+#    #+#             */
-/*   Updated: 2023/12/11 16:56:25 by tanselmo         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:40:00 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,3 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	dst[i] = '\0';
 	return (dst_len + src_len);
 }
-
-/* int	main()
-{
-	char	dst[] = "Holaaa";
-	char	src[] = "bien";
-	
-	printf("%zu\n", ft_strlcat(dst, src, 6));
-	return (0);
-} */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 20:08:15 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/21 17:45:50 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/23 01:18:50 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,8 @@ char	*get_word(char *s1, int *i)
 	return (line);
 }
 
-char	*get_exp(char *line, int *i, t_msh *msh)
+static char	*process_var_name(char *line, int *i, int start)
 {
-	char	*ret;
-	char	*var;
-	int		start;
-
-	if (!line || !i || !msh)
-		return (ft_strdup(""));
-	start = *i + 1;
-	*i += 1;
-	if (!line[*i] || line[*i] == ' ' || line[*i] == '"' || line[*i] == '\'')
-		return (ft_strdup("$"));
 	if (line[start] == '{')
 	{
 		start++;
@@ -65,7 +55,22 @@ char	*get_exp(char *line, int *i, t_msh *msh)
 			*i += 1;
 	if (*i == start && line[*i] == '?')
 		*i += 1;
-	var = ft_substr(line, start, (*i - start));
+	return (ft_substr(line, start, (*i - start)));
+}
+
+char	*get_exp(char *line, int *i, t_msh *msh)
+{
+	char	*ret;
+	char	*var;
+	int		start;
+
+	if (!line || !i || !msh)
+		return (ft_strdup(""));
+	start = *i + 1;
+	*i += 1;
+	if (!line[*i] || line[*i] == ' ' || line[*i] == '"' || line[*i] == '\'')
+		return (ft_strdup("$"));
+	var = process_var_name(line, i, start);
 	if (!var)
 		return (ft_strdup(""));
 	if (line[*i] == '}')
@@ -73,6 +78,19 @@ char	*get_exp(char *line, int *i, t_msh *msh)
 	ret = expand_var(var, msh, 0);
 	free(var);
 	return (ret);
+}
+
+static char	*handle_special_var(char *var, t_msh *msh, char *line)
+{
+	if (!var || var[0] == '\0')
+		return (line);
+	if (var[0] == '?' && !var[1])
+	{
+		free(line);
+		line = ft_itoa(msh->state);
+		return (line ? line : ft_strdup(""));
+	}
+	return (line);
 }
 
 char	*expand_var(char *var, t_msh *msh, int len)
@@ -86,14 +104,11 @@ char	*expand_var(char *var, t_msh *msh, int len)
 	line = ft_strdup("");
 	if (!line)
 		return (ft_strdup(""));
-	if (!var || var[0] == '\0')
+	
+	line = handle_special_var(var, msh, line);
+	if (line && var[0] == '?')
 		return (line);
-	if (var[0] == '?' && !var[1])
-	{
-		free(line);
-		line = ft_itoa(msh->state);
-		return (line ? line : ft_strdup(""));
-	}
+		
 	while (aux)
 	{
 		len = ft_strlen(aux->type);

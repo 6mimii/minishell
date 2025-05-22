@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:47:18 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/19 12:45:43 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/23 01:18:50 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,20 @@ void	free_matrix(char **matrix)
 	matrix = NULL;
 }
 
+static void	cleanup_command_resources(t_cmd *cmd)
+{
+	if (cmd->fd_in > 2)
+	{
+		if (access(".here_doc.tmp", F_OK) == 0)
+			unlink(".here_doc.tmp");
+		close(cmd->fd_in);
+	}
+	if (cmd->fd_out > 2)
+		close(cmd->fd_out);
+	free_matrix(cmd->argv);
+	free(cmd);
+}
+
 void	free_commands(t_cmd **cmd)
 {
 	t_cmd	*aux;
@@ -49,16 +63,7 @@ void	free_commands(t_cmd **cmd)
 	while (*cmd)
 	{
 		aux = (*cmd)->next;
-		if ((*cmd)->fd_in > 2)
-		{
-			if (access(".here_doc.tmp", F_OK) == 0)
-				unlink(".here_doc.tmp");
-			close((*cmd)->fd_in);
-		}
-		if ((*cmd)->fd_out > 2)
-			close((*cmd)->fd_out);
-		free_matrix((*cmd)->argv);
-		free(*cmd);
+		cleanup_command_resources(*cmd);
 		*cmd = aux;
 	}
 	*cmd = NULL;
