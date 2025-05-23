@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:50:08 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/22 20:40:00 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/23 18:05:11 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,46 +67,54 @@ static int delete_env_var(t_msh *msh, char *var) {
     return (0);
 }
 
+static char	*create_env_variable(t_env *curr)
+{
+	char	*tmp;
+	char	*result;
+
+	if (!curr->content)
+		return (ft_strdup(curr->type));
+	
+	tmp = ft_strjoin(curr->type, "=");
+	if (!tmp)
+		return (NULL);
+	
+	result = ft_strjoin(tmp, curr->content);
+	free(tmp);
+	
+	return (result);
+}
+
+static int	allocate_env_array(char ***new_envp, int env_count)
+{
+	*new_envp = (char **)malloc(sizeof(char *) * (env_count + 1));
+	if (!*new_envp)
+		return (0);
+	return (1);
+}
+
 static char	**create_envp_array(t_msh *msh)
 {
 	int		env_count;
 	char	**new_envp;
 	t_env	*curr;
 	int		i;
-	char	*tmp;
 	
 	env_count = count_env_nodes(msh->env);
-	new_envp = (char **)malloc(sizeof(char *) * (env_count + 1));
-	if (!new_envp)
+	if (!allocate_env_array(&new_envp, env_count))
 		return (NULL);
 	
 	i = 0;
 	curr = msh->env;
 	while (curr)
 	{
-		if (curr->content)
+		new_envp[i] = create_env_variable(curr);
+		if (!new_envp[i])
 		{
-			tmp = ft_strjoin(curr->type, "=");
-			if (!tmp)
-			{
-				while (--i >= 0)
-					free(new_envp[i]);
-				free(new_envp);
-				return (NULL);
-			}
-			new_envp[i] = ft_strjoin(tmp, curr->content);
-			free(tmp);
-			if (!new_envp[i])
-			{
-				while (--i >= 0)
-					free(new_envp[i]);
-				free(new_envp);
-				return (NULL);
-			}
-		}
-		else
-		{
-			new_envp[i] = ft_strdup(curr->type);
+			while (--i >= 0)
+				free(new_envp[i]);
+			free(new_envp);
+			return (NULL);
 		}
 		i++;
 		curr = curr->next;
