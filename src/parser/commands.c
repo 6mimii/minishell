@@ -23,23 +23,22 @@ static int is_logical_operator(t_token *token)
     return 0;
 }
 
-static void	set_fd(t_token **tok, t_cmd *new, t_msh *msh)
-{
-	while (*tok && (*tok)->type != T_PIPE && !is_logical_operator(*tok))
-	{
-		if ((*tok)->type == T_G)
-			set_outfile(tok, new, msh);
-		else if ((*tok)->type == T_DG)
-			set_append(tok, new, msh);
-		else if ((*tok)->type == T_L)
-			set_infile(tok, new, msh);
-		else if ((*tok)->type == T_DL)
-			set_heredoc(tok, new, msh);
-		else if ((*tok)->type == T_WORD)
-			*tok = (*tok)->next;
-		else if (*tok)
-			*tok = (*tok)->next;
-		
+static void process_token(t_token **tok, t_cmd *new, t_msh *msh) {
+	if ((*tok)->type == T_G)
+		set_outfile(tok, new, msh);
+	else if ((*tok)->type == T_DG)
+		set_append(tok, new, msh);
+	else if ((*tok)->type == T_L)
+		set_infile(tok, new, msh);
+	else if ((*tok)->type == T_DL)
+		set_heredoc(tok, new, msh);
+	else if ((*tok)->type == T_WORD || *tok)
+		*tok = (*tok)->next;
+}
+
+static void set_fd(t_token **tok, t_cmd *new, t_msh *msh) {
+	while (*tok && (*tok)->type != T_PIPE && !is_logical_operator(*tok)) {
+		process_token(tok, new, msh);
 		if (new->error)
 			break;
 	}
@@ -74,10 +73,18 @@ int	get_command_len(t_token *token)
 	return (len);
 }
 
-static void	set_cmd(t_msh *msh, t_token **tokens)
-{
-	t_cmd	*new_command;
-	int		len;
+static void finalize_command(t_msh *msh, t_cmd *new_command, t_token **tokens) {
+	set_fd(tokens, new_command, msh);
+	msh->cmd_len += 1;
+	create_command_list(&msh->cmd, new_command);
+	while (*tokens && (*tokens)->type != T_PIPE && !is_logical_operator(*tokens)) {
+		*tokens = (*tokens)->next;
+	}
+}
+
+static void set_cmd(t_msh *msh, t_token **tokens) {
+	t_cmd *new_command;
+	int len;
 
 	if (!tokens || !*tokens)
 		return;
@@ -86,32 +93,23 @@ static void	set_cmd(t_msh *msh, t_token **tokens)
 	new_command = new_node_command();
 	if (!new_command)
 		return;
-		
+
 	new_command->argv = (char **)malloc(sizeof(char *) * (len + 1));
-	if (!new_command->argv)
-	{
+	if (!new_command->argv) {
 		free(new_command);
 		return;
 	}
-	
-	if (len > 0)
-	{
-		if (command_content(new_command, *tokens) == 0)
-		{
+
+	if (len > 0) {
+		if (command_content(new_command, *tokens) == 0) {
 			error_msh(MLLC_ERR, msh, 2);
 			new_command->error = 1;
 		}
-	}
-	else
+	} else {
 		new_command->argv[0] = NULL;
-		
-	set_fd(tokens, new_command, msh);
-	msh->cmd_len += 1;
-	create_command_list(&msh->cmd, new_command);
-	
-	while (*tokens && (*tokens)->type != T_PIPE && !is_logical_operator(*tokens)) {
-		*tokens = (*tokens)->next;
 	}
+
+	finalize_command(msh, new_command, tokens);
 }
 
 void	get_command(t_msh *msh)

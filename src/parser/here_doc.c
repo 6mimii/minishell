@@ -12,34 +12,33 @@
 
 #include "../minishell.h"
 
-char	*exp_line(char *str, t_msh *msh)
-{
-	char	*aux;
-	char	*line;
-	int		i;
+char *exp_line_helper(char *str, int *i) {
+    if (str[*i] == '\\')
+        return no_expand_var(str, i);
+    else if (str[*i] == '$' && str[*i + 1] == '~') {
+        *i += 2;
+        return ft_strdup("$~");
+    } else if (str[*i] == '$')
+        return get_exp(str, i, NULL);
+    return get_word(str, i);
+}
 
-	(void)msh;
-	line = ft_strdup("");
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\\')
-			aux = no_expand_var(str, &i);
-		else if (str[i] == '$' && str[i + 1] == '~')
-		{
-			aux = ft_strdup("$~");
-			i += 2;
-		}
-		else if (str[i] == '$')
-			aux = get_exp(str, &i, msh);
-		else
-			aux = get_word(str, &i);
-		line = ft_strjoin(line, aux);
-	}
-	free(str);
-	str = ft_strdup(line);
-	free(line);
-	return (str);
+char *exp_line(char *str, t_msh *msh) {
+    char *aux;
+    char *line;
+    int i;
+
+    (void)msh;
+    line = ft_strdup("");
+    i = 0;
+    while (str[i]) {
+        aux = exp_line_helper(str, &i);
+        line = ft_strjoin(line, aux);
+    }
+    free(str);
+    str = ft_strdup(line);
+    free(line);
+    return str;
 }
 
 char	*expand_heredoc(char *line, t_msh *msh)
@@ -59,11 +58,12 @@ char	*expand_heredoc(char *line, t_msh *msh)
 	return (aux);
 }
 
-void	ctrl_c_hd(int signal)
-{
-	(void)signal;
-	ft_putstr_fd("\n", 1);
-	exit(130);
+void ctrl_c_hd(int signal) {
+    (void)signal;
+    ft_putstr_fd("\n", 1); // Imprime un salto de línea
+    rl_replace_line("", 0); // Limpia la línea actual en el prompt
+    rl_on_new_line();       // Mueve el cursor a una nueva línea
+    rl_redisplay();         // Redibuja el prompt
 }
 
 void	free_and_exit_hd(t_msh *msh, t_cmd *new, int state)

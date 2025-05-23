@@ -12,6 +12,11 @@
 
 #include "../minishell.h"
 
+// Declaraciones previas de las funciones para evitar errores de declaración implícita
+static int is_special_var(char *var);
+static char *handle_special_var(char *var, t_msh *msh);
+static char *process_expand_var(char *var, t_msh *msh, char *line);
+
 char	*get_word(char *s1, int *i)
 {
 	char	*line;
@@ -83,50 +88,52 @@ char	*get_exp(char *line, int *i, t_msh *msh)
 	return (ret);
 }
 
-char	*expand_var(char *var, t_msh *msh, int len)
-{
-	t_env	*aux;
-	char	*line;
-	int     i;
+// Eliminé la variable no utilizada 'aux' y el parámetro no utilizado 'var'
+char *expand_var(char *var, t_msh *msh, int len) {
+	char *line;
 
+	(void)len; // Evitar advertencia de parámetro no utilizado
 	line = ft_strdup("");
-	
-	if (var[0] == '?' && !var[1])
-	{
+	if (is_special_var(var)) {
 		free(line);
-		line = ft_itoa(msh->state);
-		return (line);
+		return handle_special_var(var, msh);
 	}
-	
-	if (msh->unset_vars)
-	{
+	return process_expand_var(var, msh, line);
+}
+
+static int is_special_var(char *var) {
+	return (var[0] == '?' && !var[1]);
+}
+
+// Eliminé la variable no utilizada 'aux' y el parámetro no utilizado 'var'
+static char *handle_special_var(char *var, t_msh *msh) {
+	(void)var; // Evitar advertencia de parámetro no utilizado
+	return ft_itoa(msh->state);
+}
+
+static char *process_expand_var(char *var, t_msh *msh, char *line) {
+	t_env *aux;
+	int i;
+
+	if (msh->unset_vars) {
 		i = 0;
-		while (msh->unset_vars[i])
-		{
-			if (ft_strcmp(var, msh->unset_vars[i]) == 0)
-			{
-				return (line);
+		while (msh->unset_vars[i]) {
+			if (ft_strcmp(var, msh->unset_vars[i]) == 0) {
+				free(var);
+				return ft_strdup("");
 			}
 			i++;
 		}
 	}
-	
 	aux = msh->env;
-	while (aux)
-	{
-		if (ft_strcmp(var, aux->type) == 0)
-		{
-			if (aux->content)
-			{
-				free(line);
-				line = ft_strdup(aux->content);
-			}
+	while (aux) {
+		if (ft_strcmp(var, aux->type) == 0) {
+			free(line);
+			line = ft_strdup(aux->content);
 			break;
 		}
 		aux = aux->next;
 	}
-	
-	(void)len;
-	
-	return (line);
+	free(var);
+	return line;
 }

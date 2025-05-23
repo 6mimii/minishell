@@ -64,20 +64,20 @@ void	wait_handler(t_msh *msh, pid_t pid)
 		msh->state = 1;
 }
 
-int	check_dollar(const char *str)
-{
-	int	i;
-	
-	if (!str)
-		return (0);
-		
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ' && str[i
-				+ 1] != '$')
-			return (1);
-		i++;
-	}
-	return (0);
+int check_dollar_helper(const char *str, int i) {
+    return str[i] == '$';
+}
+
+int check_dollar(const char *str) {
+    int i;
+
+    if (!str)
+        return 0;
+    i = 0;
+    while (str[i]) {
+        if (check_dollar_helper(str, i))
+            return 1;
+        i++;
+    }
+    return 0;
 }

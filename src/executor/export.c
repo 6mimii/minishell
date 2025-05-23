@@ -81,27 +81,27 @@ static void	add_vars(t_msh *msh, char *str)
 	}
 }
 
-static int	parse_export(t_msh *msh, char *line)
-{
-	int	i;
-	
-	if (!ft_isalpha(line[0]) && line[0] != '_') 
-	{
-		write(2, "Error: Invalid start character\n", 30);
-		return (error_msh(EXPORT, msh, 1), 0);
-	}
-	
-	i = 0;
-	while (line[i] && line[i] != '=') 
-	{
-		if (!ft_isalnum(line[i]) && line[i] != '_') 
-		{
-			write(2, "Error: Invalid character in variable name\n", 40);
-			return (error_msh(EXPORT, msh, 1), 0);
-		}
-		i++;
-	}
-	return (1);
+static int validate_export_char(char c) {
+    return ft_isalnum(c) || c == '_';
+}
+
+static int parse_export(t_msh *msh, char *line) {
+    int i;
+
+    if (!ft_isalpha(line[0]) && line[0] != '_') {
+        write(2, "Error: Invalid start character\n", 30);
+        return error_msh(EXPORT, msh, 1), 0;
+    }
+
+    i = 0;
+    while (line[i] && line[i] != '=') {
+        if (!validate_export_char(line[i])) {
+            write(2, "Error: Invalid character in variable name\n", 40);
+            return error_msh(EXPORT, msh, 1), 0;
+        }
+        i++;
+    }
+    return 1;
 }
 
 void	ft_export(t_msh *msh, t_cmd *cmd)

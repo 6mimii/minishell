@@ -12,6 +12,10 @@
 
 #include "../minishell.h"
 
+// Declaraciones previas de las funciones para evitar errores de declaración implícita
+static int is_limit_reached(char *line, char *limit, int len);
+static char *process_heredoc_line(char *line, t_msh *msh, int fd);
+
 static void	new_handler(int sig)
 {
 	if (sig == SIGINT)
@@ -50,32 +54,37 @@ static void	wait_hd(t_token *tok, t_cmd *cmd, t_msh *msh, int fd)
 	cmd->fd_in = open(".here_doc.tmp", O_RDONLY);
 }
 
-static void	here_doc(char *limit, t_cmd *new, t_msh *msh, int fd)
-{
-	char	*line;
-	int		len;
+static void here_doc(char *limit, t_cmd *new, t_msh *msh, int fd) {
+	char *line;
+	int len;
 
 	(void)new;
 	len = ft_strlen(limit);
 	line = readline("> ");
-	while (line)
-	{
-		if (ft_strncmp(line, limit, len) == 0 && !line[len])
-		{
+	while (line) {
+		if (is_limit_reached(line, limit, len)) {
 			free(line);
-			break ;
+			break;
 		}
-		line = expand_heredoc(line, msh);
-		if (line)
-		{
-			ft_putendl_fd(line, fd);
-			free(line);
-		}
+		line = process_heredoc_line(line, msh, fd);
 		line = readline("> ");
 	}
 	if (!line)
 		free_and_exit_hd(msh, new, 1);
 	free_and_exit_hd(msh, new, 0);
+}
+
+static int is_limit_reached(char *line, char *limit, int len) {
+	return (ft_strncmp(line, limit, len) == 0 && !line[len]);
+}
+
+static char *process_heredoc_line(char *line, t_msh *msh, int fd) {
+	line = expand_heredoc(line, msh);
+	if (line) {
+		ft_putendl_fd(line, fd);
+		free(line);
+	}
+	return line;
 }
 
 void	set_heredoc(t_token **tok, t_cmd *new, t_msh *msh)
