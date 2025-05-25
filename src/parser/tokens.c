@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 15:19:43 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/25 22:57:54 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@ void	set_double_quote_token(char *line, int *i, t_token **tokens, t_msh *msh)
 		if (*i > 0 && line[*i - 1] != ' ')
 			flag = 1;
 		(*i)++;
+		
 		while (line[*i] && line[*i] != '\"')
 			*i += 1;
+		
 		if (line[*i] == '\"')
 		{
-			create_token_lst(tokens, T_DQ, ft_substr(line, start, (*i - start)),
-				flag);
+			create_token_lst(tokens, T_DQ, ft_substr(line, start, (*i - start)), flag);
 			*i += 1;
 		}
 		else

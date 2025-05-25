@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:47 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/21 00:12:13 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/25 22:57:54 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,11 @@ static int	clean_tokens(t_msh *msh)
 
 static void reset_msh_for_next_command(t_msh *msh)
 {
-    // Guardamos referencias a estructuras importantes que queremos preservar
     char **unset_vars = msh->unset_vars;
     t_env *env = msh->env;
     char **envp = msh->envp;
     int state = msh->state;
     
-    // Liberamos las estructuras temporales
     if (msh->tokens)
         free_tokens(&msh->tokens);
     if (msh->cmd)
@@ -47,10 +45,9 @@ static void reset_msh_for_next_command(t_msh *msh)
         msh->path = NULL;
     }
     
-    // Reinicializamos la estructura pero preservamos valores importantes
     msh->env = env;
     msh->envp = envp;
-    msh->unset_vars = unset_vars;  // Preservamos la lista de variables eliminadas
+    msh->unset_vars = unset_vars;
     msh->cmd_len = 0;
     msh->parse_error = 0;
     msh->state = state;
@@ -69,7 +66,7 @@ void	init_msh(char **envp, t_msh *msh)
 	msh->cmd = NULL;
 	msh->tokens = NULL;
 	msh->path = NULL;
-	msh->unset_vars = NULL;  // Inicializamos la lista de variables eliminadas
+	msh->unset_vars = NULL;
 }
 
 void	get_input(t_msh *msh)
@@ -90,7 +87,6 @@ void	get_input(t_msh *msh)
 				get_command(msh);
 				if (msh->cmd)
 					executor(msh);
-				// En lugar de reinicializar todo, usamos la función para preservar unset_vars
 				reset_msh_for_next_command(msh);
 			}
 		}

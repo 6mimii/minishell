@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:47:18 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/23 18:44:06 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/25 22:57:54 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void	free_msh(t_msh *msh)
 		msh->path = NULL;
 	}
 	
-	// Liberar la lista de variables eliminadas
 	if (msh->unset_vars)
 	{
 		i = 0;

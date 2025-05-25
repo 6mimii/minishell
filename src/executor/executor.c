@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:45:06 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/25 22:57:49 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_builtin(t_msh *msh, t_cmd *cmd)
 	else if (ft_strcmp(cmd->argv[0], "export") == 0)
 	{
 		ft_export(msh, cmd);
-		msh->state = 0; // Indicar éxito
+		msh->state = 0;
 		return (0);
 	}
 	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
@@ -34,7 +34,7 @@ int	is_builtin(t_msh *msh, t_cmd *cmd)
 	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
 	{
 		ft_unset(msh, cmd);
-		msh->state = 0; // Indicar éxito
+		msh->state = 0;
 		return (0);
 	}
 	else if (ft_strcmp(cmd->argv[0], "env") == 0)
@@ -68,7 +68,6 @@ void	executor(t_msh *msh)
 	close(saved_stdin);
 	close(saved_stdout);
 	setup_signals(msh);
-	// Clean up paths after execution
 	if (msh->path)
 	{
 		free_matrix(msh->path);

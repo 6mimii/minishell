@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:04:25 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/21 00:49:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/25 22:57:54 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void	expand_flag(t_token *tok)
 		}
 		
 		aux->exp = 0;
-		// Importante: solo expandir en T_WORD o T_DQ (comillas dobles)
-		// T_Q (comillas simples) nunca debe expandirse
 		if (aux->type == T_WORD || aux->type == T_DQ)
 		{
 			if (check_dollar(aux->content) == 1)
@@ -39,10 +37,9 @@ void	expand_flag(t_token *tok)
 			else if (check_home(aux->content) == 2)
 				aux->exp = 3;
 		}
-		// Asegurar que los tokens de tipo T_Q (comillas simples) nunca se expandan
 		else if (aux->type == T_Q) 
 		{
-			aux->exp = 0;  // Forzar a 0 para evitar cualquier expansión
+			aux->exp = 0;
 		}
 		
 		aux = aux->next;

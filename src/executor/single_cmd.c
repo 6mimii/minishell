@@ -67,7 +67,6 @@ void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 	}
 	
 	if (!msh->envp) {
-		// Fallback to system environment if our environment is NULL
 		extern char **environ;
 		execve(full_path, cmd->argv, environ);
 	} else {
@@ -92,7 +91,7 @@ void	handle_single_command(t_msh *msh)
 		return;
 	
 	if (is_builtin(msh, msh->cmd) == 0) {
-		msh->state = 0; // Indicar éxito en la ejecución del builtin
+		msh->state = 0;
 		return;
 	}
 	

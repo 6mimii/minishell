@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:16:50 by mimi-notebo       #+#    #+#             */
-/*   Updated: 2025/05/23 18:44:06 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/25 22:57:54 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ char	*expand_heredoc(char *line, t_msh *msh)
 
 void ctrl_c_hd(int signal) {
     (void)signal;
-    ft_putstr_fd("\n", 1); // Imprime un salto de línea
-    rl_replace_line("", 0); // Limpia la línea actual en el prompt
-    rl_on_new_line();       // Mueve el cursor a una nueva línea
-    rl_redisplay();         // Redibuja el prompt
+    ft_putstr_fd("\n", 1);
+    rl_replace_line("", 0);
+    rl_on_new_line();
+    rl_redisplay();
 }
 
 void	free_and_exit_hd(t_msh *msh, t_cmd *new, int state)

@@ -12,7 +12,6 @@
 
 #include "../minishell.h"
 
-// Declaraciones previas de las funciones para evitar errores de declaración implícita
 static int is_special_var(char *var);
 static char *handle_special_var(char *var, t_msh *msh);
 static char *process_expand_var(char *var, t_msh *msh, char *line);
@@ -88,11 +87,10 @@ char	*get_exp(char *line, int *i, t_msh *msh)
 	return (ret);
 }
 
-// Eliminé la variable no utilizada 'aux' y el parámetro no utilizado 'var'
 char *expand_var(char *var, t_msh *msh, int len) {
 	char *line;
 
-	(void)len; // Evitar advertencia de parámetro no utilizado
+	(void)len;
 	line = ft_strdup("");
 	if (is_special_var(var)) {
 		free(line);
@@ -105,9 +103,8 @@ static int is_special_var(char *var) {
 	return (var[0] == '?' && !var[1]);
 }
 
-// Eliminé la variable no utilizada 'aux' y el parámetro no utilizado 'var'
 static char *handle_special_var(char *var, t_msh *msh) {
-	(void)var; // Evitar advertencia de parámetro no utilizado
+	(void)var;
 	return ft_itoa(msh->state);
 }
 

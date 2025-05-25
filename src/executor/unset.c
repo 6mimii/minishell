@@ -6,15 +6,12 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:50:08 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/21 00:49:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/25 22:58:10 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*
-** Libera la memoria de un nodo de entorno
-*/
 static void	free_env_node(t_env *env)
 {
 	if (!env)
@@ -26,9 +23,7 @@ static void	free_env_node(t_env *env)
 	free(env);
 }
 
-/*
-** Cuenta el número de nodos en la lista enlazada de entorno
-*/
+
 static int	count_env_nodes(t_env *env)
 {
 	t_env	*curr;
@@ -44,10 +39,7 @@ static int	count_env_nodes(t_env *env)
 	return (count);
 }
 
-/*
-** Elimina una variable de entorno de la lista enlazada
-** Devuelve 1 si se encontró y eliminó la variable, 0 si no
-*/
+
 static int	delete_env_var(t_msh *msh, char *var)
 {
 	t_env	*curr;

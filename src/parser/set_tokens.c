@@ -6,7 +6,7 @@
 /*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 19:11:58 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/05/21 00:49:20 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/25 22:57:54 by mimi-notebo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	set_word_token(char *input, int *i, t_token **tokens)
 		while (input[*i] && input[*i] > 32 && input[*i] < 127
 			&& input[*i] != '<' && input[*i] != '>' && input[*i] != '|'
 			&& input[*i] != '\'' && input[*i] != '\"' && input[*i] != '\\'
-			// Also stop if we encounter a logical operator like &&
+			&& input[*i] != ' ' && input[*i] != '\n'
 			&& !(input[*i] == '&' && input[*i + 1] == '&'))
 		{
 			(*i)++;
@@ -120,30 +120,51 @@ t_token	*set_tokens(char *input, t_msh *msh)
 {
 	int		i;
 	t_token	*tokens;
+	int     in_quotes;
 
 	i = 0;
 	tokens = NULL;
+	in_quotes = 0;
 	
 	while (input[i] && !msh->parse_error)
 	{
-		if (input[i] == '&' && input[i + 1] == '&')
-			set_logical_operator_token(input, &i, &tokens);
-		else if (input[i] != ' ' && input[i] != '<' && input[i] != '>'
-			&& input[i] != '|' && input[i] != '\n' && input[i] != '\''
-			&& input[i] != '\"')
-			set_word_token(input, &i, &tokens);
-		else if (input[i] == '<')
-			set_lower_token(input, &i, &tokens);
-		else if (input[i] == '>')
-			set_greather_token(input, &i, &tokens);
-		else if (input[i] == '|')
-			set_pipe_token(input, &i, &tokens);
-		else if (input[i] == '\'')
+		if (input[i] == '\'' && in_quotes != 2)
+		{
+			if (in_quotes == 1)
+				in_quotes = 0;
+			else
+				in_quotes = 1;
 			set_quote_token(input, &i, &tokens, msh);
-		else if (input[i] == '\"')
+		}
+		else if (input[i] == '\"' && in_quotes != 1)
+		{
+			if (in_quotes == 2)
+				in_quotes = 0;
+			else
+				in_quotes = 2;
 			set_double_quote_token(input, &i, &tokens, msh);
-		else if (input[i] == ' ' || input[i] == '\n')
+		}
+		else if (in_quotes == 0 && input[i] == '&' && input[i + 1] == '&')
+			set_logical_operator_token(input, &i, &tokens);
+		else if (in_quotes == 0 && input[i] == '<')
+			set_lower_token(input, &i, &tokens);
+		else if (in_quotes == 0 && input[i] == '>')
+			set_greather_token(input, &i, &tokens);
+		else if (in_quotes == 0 && input[i] == '|')
+			set_pipe_token(input, &i, &tokens);
+		else if (input[i] != ' ' && input[i] != '\n')
+			set_word_token(input, &i, &tokens);
+		else
 			i++;
+	}
+	
+	if (in_quotes != 0)
+	{
+		if (in_quotes == 1)
+			error_msh(WRONG_Q, msh, 2);
+		else
+			error_msh(WRONG_DQ, msh, 2);
+		msh->parse_error = 1;
 	}
 	
 	return (tokens);
