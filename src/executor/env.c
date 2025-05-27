@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:48:31 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/01 16:24:03 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:20:37 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,14 @@ char	*get_env_type(t_msh *msh, char *var)
 	return (NULL);
 }
 
+static void	print_env_error(char *next, t_msh *msh)
+{
+	ft_putstr_fd("env: '", 2);
+	ft_putstr_fd(next, 2);
+	ft_putendl_fd("': No such file or directory", 2);
+	msh->state = 127;
+}
+
 void	ft_env(t_msh *msh, t_cmd *cmd, char *next)
 {
 	t_env	*tmp;
@@ -87,13 +95,7 @@ void	ft_env(t_msh *msh, t_cmd *cmd, char *next)
 	if (!tmp)
 		return ;
 	if (next)
-	{
-		ft_putstr_fd("env: '", 2);
-		ft_putstr_fd(next, 2);
-		ft_putendl_fd("': No such file or directory", 2);
-		msh->state = 127;
-		return ;
-	}
+		return (print_env_error(next, msh));
 	while (tmp)
 	{
 		if (tmp->content)

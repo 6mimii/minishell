@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_flag.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:04:25 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/25 22:57:54 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/27 17:33:09 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,15 @@ void	expand_flag(t_token *tok)
 	t_token	*aux;
 
 	if (!tok)
-		return;
-
+		return ;
 	aux = tok;
 	while (aux)
 	{
-		if (!aux->content) {
+		if (!aux->content)
+		{
 			aux = aux->next;
-			continue;
+			continue ;
 		}
-		
 		aux->exp = 0;
 		if (aux->type == T_WORD || aux->type == T_DQ)
 		{
@@ -37,23 +36,39 @@ void	expand_flag(t_token *tok)
 			else if (check_home(aux->content) == 2)
 				aux->exp = 3;
 		}
-		else if (aux->type == T_Q) 
-		{
-			aux->exp = 0;
-		}
-		
 		aux = aux->next;
 	}
 }
 
 int	check_home(const char *str)
 {
-	if (!str || !*str) 
+	if (!str || !*str)
 		return (0);
-		
 	if (str[0] == '~' && (!str[1] || str[1] == '/'))
 		return (1);
 	else if (str[0] == '~' && str[1] == '/')
 		return (2);
 	return (0);
+}
+
+void	expand_both(t_token *tok, t_msh *msh)
+{
+	char	*home;
+	char	*aux;
+
+	if (!tok || !tok->content || !msh)
+		return ;
+	aux = ft_strdup(&tok->content[1]);
+	if (!aux)
+		return ;
+	expand_home(tok, msh);
+	home = ft_strdup(tok->content);
+	if (!home)
+		return ;
+	free(tok->content);
+	tok->content = ft_strjoin(home, aux);
+	if (!tok->content)
+		return ;
+	free(home);
+	free(aux);
 }

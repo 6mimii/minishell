@@ -6,11 +6,13 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 15:22:29 by mimi-notebo       #+#    #+#             */
-/*   Updated: 2025/05/23 18:44:06 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:55:45 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include <signal.h>
+#include <termios.h>
 
 int	g_signal = 0;
 
@@ -27,42 +29,51 @@ void	ctrl_c(void)
 		write(1, "\n", 1);
 }
 
-static void	sig_handler(int sig)
+static void	sig_handler_interactive(int sig)
 {
-	if (sig == SIGINT && (g_signal == 0 || g_signal == 1))
-		ctrl_c();
-	if (sig == SIGQUIT && g_signal == 1)
-		ft_putendl_fd("Quit (core dumped)", 2);
+	if (sig == SIGINT)
+	{
+		g_signal = 130;
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
-void	ctrl_d(void)
+void	ctrl_d(t_msh *msh)
 {
 	ft_putstr_fd("exit\n", 1);
+	free_msh(msh);
 	exit(0);
 }
 
-void	setup_signals(t_msh *msh)
+static void	sig_handler_exec(int sig)
 {
-	struct sigaction	act;
-
-	act.sa_handler = &sig_handler;
-	act.sa_flags = SA_RESTART;
-	sigemptyset(&act.sa_mask);
-	if (sigaction(SIGINT, &act, NULL) == -1)
-		error_msh("Error: sigaction", msh, 1);
-	if (g_signal == 0)
+	if (sig == SIGINT)
 	{
-		act.sa_handler = SIG_IGN;
-		if (sigaction(SIGQUIT, &act, NULL) == -1)
-			error_msh("Error: sigaction", msh, 1);
+		g_signal = 130;
+		write(1, "\n", 1);
+	}
+	else if (sig == SIGQUIT)
+	{
+		g_signal = 131;
+		ft_putendl_fd("Quit (core dumped)", 2);
+	}
+}
+
+void	setup_signals(void)
+{
+	if (g_signal == 0 || g_signal == 130)
+	{
+		signal(SIGINT, sig_handler_interactive);
+		signal(SIGQUIT, SIG_IGN);
+		g_signal = 0;
 	}
 	else if (g_signal == 1)
 	{
-		act.sa_handler = &sig_handler;
-		if (sigaction(SIGQUIT, &act, NULL) == -1)
-			error_msh("Error: sigaction", msh, 1);
+		signal(SIGINT, sig_handler_exec);
+		signal(SIGQUIT, sig_handler_exec);
 	}
-	act.sa_handler = SIG_IGN;
-	if (sigaction(SIGTSTP, &act, NULL) == -1)
-		error_msh("Error: sigaction", msh, 1);
+	signal(SIGTSTP, SIG_IGN);
 }

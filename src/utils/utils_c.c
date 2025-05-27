@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:47:53 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/23 18:44:06 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:22:09 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,24 @@ void	wait_handler(t_msh *msh, pid_t pid)
 		msh->state = 1;
 }
 
-int check_dollar_helper(const char *str, int i) {
-    return str[i] == '$';
+int	check_dollar_helper(const char *str, int i)
+{
+	return (str[i] == '$');
 }
 
-int check_dollar(const char *str) {
-    int i;
+int	check_dollar(const char *str)
+{
+	int	i;
 
-    if (!str)
-        return 0;
-    i = 0;
-    while (str[i]) {
-        if (check_dollar_helper(str, i))
-            return 1;
-        i++;
-    }
-    return 0;
+	if (!str)
+		return (0);
+	i = 0;
+	while (str[i])
+	{
+		if (check_dollar_helper(str, i) && str[i + 1] && (ft_isalnum(str[i + 1])
+				|| str[i + 1] == '_' || str[i + 1] == '?' || str[i + 1] == '{'))
+			return (1);
+		i++;
+	}
+	return (0);
 }

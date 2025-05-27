@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:40 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/17 13:00:35 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:19:06 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	init_env_lst(t_env **lst, char **envp)
 
 t_env	*enviroment_lst(char **envp)
 {
-	t_env *env;
+	t_env	*env;
 
 	if (!envp || !*envp)
 		return (NULL);
@@ -66,7 +66,7 @@ t_env	*enviroment_lst(char **envp)
 
 t_env	*create_env_lst(char **envp)
 {
-	t_env *env;
+	t_env	*env;
 
 	if (!envp || !*envp)
 		return (NULL);

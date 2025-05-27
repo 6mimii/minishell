@@ -22,8 +22,8 @@ char	*find_cmd(char **path, char *cmd, t_msh *msh)
 	(void)msh;
 	if (!cmd || cmd[0] == '\0')
 		return (NULL);
-	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') || 
-		(cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
+	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') || (cmd[0] == '.'
+			&& cmd[1] == '.' && cmd[2] == '/'))
 	{
 		if (access(cmd, F_OK | X_OK) == 0)
 			return (ft_strdup(cmd));
@@ -47,6 +47,18 @@ char	*find_cmd(char **path, char *cmd, t_msh *msh)
 	return (NULL);
 }
 
+static void	execute_command(t_msh *msh, t_cmd *cmd, char *full_path)
+{
+	extern char	**environ;
+
+	if (!msh->envp)
+		execve(full_path, cmd->argv, environ);
+	else
+		execve(full_path, cmd->argv, msh->envp);
+	free(full_path);
+	free_and_exit("execve failed", msh, EXIT_FAILURE, true);
+}
+
 void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 {
 	char	*full_path;
@@ -56,7 +68,6 @@ void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 		ft_putstr_fd("Minishell: command missing\n", 2);
 		free_and_exit("", msh, 0, false);
 	}
-	
 	full_path = find_cmd(paths, cmd->argv[0], msh);
 	if (!full_path)
 	{
@@ -65,51 +76,42 @@ void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 		ft_putendl_fd(": command not found", 2);
 		free_and_exit("", msh, 127, false);
 	}
-	
-	if (!msh->envp) {
-		extern char **environ;
-		execve(full_path, cmd->argv, environ);
-	} else {
-		execve(full_path, cmd->argv, msh->envp);
+	execute_command(msh, cmd, full_path);
+}
+
+static void	setup_child_redirections(t_msh *msh)
+{
+	if (msh->cmd->fd_in != STDIN_FILENO)
+	{
+		dup2(msh->cmd->fd_in, STDIN_FILENO);
+		close(msh->cmd->fd_in);
 	}
-	
-	free(full_path);
-	free_and_exit("execve failed", msh, EXIT_FAILURE, true);
+	if (msh->cmd->fd_out != STDOUT_FILENO)
+	{
+		dup2(msh->cmd->fd_out, STDOUT_FILENO);
+		close(msh->cmd->fd_out);
+	}
 }
 
 void	handle_single_command(t_msh *msh)
 {
 	pid_t	pid;
-	
-	if (!msh || !msh->cmd)
-		return;
-	
-	if (msh->cmd->error)
-		return;
-	
+
+	if (!msh || !msh->cmd || msh->cmd->error)
+		return ;
 	if (!msh->cmd->argv || !msh->cmd->argv[0])
-		return;
-	
-	if (is_builtin(msh, msh->cmd) == 0) {
+		return ;
+	if (is_builtin(msh, msh->cmd) == 0)
+	{
 		msh->state = 0;
-		return;
+		return ;
 	}
-	
 	pid = fork();
 	if (pid < 0)
 		error_msh("Error creating pid", msh, 0);
 	if (pid == 0)
 	{
-		if (msh->cmd->fd_in != STDIN_FILENO)
-		{
-			dup2(msh->cmd->fd_in, STDIN_FILENO);
-			close(msh->cmd->fd_in);
-		}
-		if (msh->cmd->fd_out != STDOUT_FILENO)
-		{
-			dup2(msh->cmd->fd_out, STDOUT_FILENO);
-			close(msh->cmd->fd_out);
-		}
+		setup_child_redirections(msh);
 		run_external_command(msh, msh->cmd, msh->path);
 	}
 	wait_handler(msh, pid);

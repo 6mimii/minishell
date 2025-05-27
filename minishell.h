@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/21 00:12:13 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/27 17:49:41 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -92,7 +91,7 @@ typedef struct s_msh
 	struct s_cmd	*cmd;
 	struct s_token	*tokens;
 	struct s_env	*env;
-	char            **unset_vars;  // Lista de variables eliminadas con unset
+	char			**unset_vars;
 }					t_msh;
 
 typedef struct s_env
@@ -115,10 +114,8 @@ void				set_word_token(char *line, int *i, t_token **tokens);
 void				set_greather_token(char *line, int *i, t_token **tokens);
 void				set_lower_token(char *line, int *i, t_token **tokens);
 void				set_pipe_token(char *line, int *i, t_token **tokens);
-void				set_quote_token(char *line, int *i, t_token **tokens,
-						t_msh *msh);
-void				set_double_quote_token(char *line, int *i, t_token **tokens,
-						t_msh *msh);
+void				set_quote_token(char *line, int *i, t_token **tokens);
+void				set_double_quote_token(char *line, int *i, t_token **tokens);
 /////////////UTILS//////////////
 void				classify_token(char *token);
 int					ft_strcmp(char *s1, char *s2);
@@ -141,6 +138,7 @@ int					cmd_content(t_cmd *new, t_token *tok);
 void				create_cmd_lst(t_cmd **cmd, t_cmd *new);
 void				get_command(t_msh *msh);
 void				create_command_list(t_cmd **cmd, t_cmd *new);
+int					get_command_len(t_token *token);
 /////////////ENVIRONMENT//////////////
 t_env				*env_lst(char **envp);
 t_env				*create_env_lst(char **envp);
@@ -160,6 +158,8 @@ void				free_and_exit_hd(t_msh *msh, t_cmd *new, int state);
 char				*no_expand_var(char *s1, int *i);
 void				expand_content(t_token *tok, t_msh *msh);
 void				expand_tokens(t_token **tokens, t_msh *msh);
+void				expand_home(t_token *tok, t_msh *msh);
+void				expand_both(t_token *tok, t_msh *msh);
 int					check_dollar(const char *str);
 int					check_home(const char *str);
 char				*get_word(char *s1, int *i);
@@ -173,8 +173,8 @@ void				free_msh(t_msh *msh);
 void				free_env(t_env *env);
 
 ////////////////SIGNALS/////////////////
-void				setup_signals(t_msh *msh);
-void				ctrl_d(void);
+void				setup_signals(void);
+void				ctrl_d(t_msh *msh);
 
 /* Executor */
 void				executor(t_msh *msh);
@@ -208,11 +208,27 @@ char				**get_path(t_msh *msh);
 void				set_cmd_ind(t_cmd *cmd);
 void				wait_handler(t_msh *msh, pid_t pid);
 void				free_and_exit_ex(t_msh *msh);
+void				cleanup_envp_array(char **array, int count);
+void				process_unset_args(t_msh *msh, t_cmd *cmd, int *changed);
+void				add_to_unset_list(t_msh *msh, char *var);
+char				**create_envp_array(t_msh *msh);
+int					get_unset_vars_length(t_msh *msh, char *var);
+int					update_envp_array(t_msh *msh);
+char				**create_new_unset_list(t_msh *msh, char *var, int len);
+int					count_env_nodes(t_env *env);
+char				*create_env_string(t_env *curr);
+int					delete_env_var(t_msh *msh, char *var);
+void				free_env_node(t_env *env);
 
 /* Errors */
 void				error_msh(char *msg, t_msh *msh, int state);
 void				error_files(char *name, char *msg);
 void				error_and_exit(char *name, int state, t_msh *msh);
 void				free_and_exit(char *msg, t_msh *msh, int state, bool print);
+
+/* Command Utils */
+int					is_logical_operator(t_token *token);
+int					process_command_token(t_cmd *new, t_token *aux, int *i);
+void				finalize_command(t_msh *msh, t_cmd *new_command, t_token **tokens);
 
 #endif

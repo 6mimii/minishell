@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:30:30 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/20 01:27:04 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/27 15:55:45 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,6 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	init_msh(envp, &msh);
+	setup_signals();
 	get_input(&msh);
 }

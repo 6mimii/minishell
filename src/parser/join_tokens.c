@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:00:11 by mimi-notebo       #+#    #+#             */
-/*   Updated: 2025/05/18 19:16:01 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:40:14 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ static t_token	*join_pop(t_token *tok)
 
 void	join_tokens(t_token **tokens)
 {
-	t_token	*aux;
+	t_token			*aux;
+	t_token_type	original_type;
 
 	aux = *tokens;
 	while (aux)
@@ -52,10 +53,11 @@ void	join_tokens(t_token **tokens)
 		while ((aux->type == T_WORD || aux->type == T_Q || aux->type == T_DQ)
 			&& aux->next && aux->next->flag == 1)
 		{
+			original_type = aux->type;
 			aux = join_pop(aux);
+			if (original_type == T_Q || original_type == T_DQ)
+				aux->type = original_type;
 		}
-		if (aux->type == T_Q || aux->type == T_DQ)
-			aux->type = T_WORD;
 		aux = aux->next;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nodes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:21:28 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/25 22:57:54 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/27 16:20:52 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	add_node_back(t_token **lst, t_token *new)
 {
-	t_token		*new_node;
+	t_token	*new_node;
 
 	if (*lst == NULL)
 	{
@@ -32,18 +32,17 @@ t_token	*new_node(char *content, int type, int flag)
 	t_token	*new;
 
 	new = (t_token *)malloc(sizeof(t_token));
-	if (!new) {
+	if (!new)
+	{
 		free(content);
 		return (NULL);
 	}
-	
 	new->content = content;
 	new->type = type;
 	new->flag = flag;
 	new->next = NULL;
 	new->exp = 0;
 	new->backslash = 0;
-	
 	return (new);
 }
 
@@ -51,26 +50,29 @@ void	create_token_lst(t_token **tok, int type, char *content, int flag)
 {
 	t_token	*aux;
 
-	if (!content) {
+	if (!content)
+	{
 		write(2, "Warning: Trying to create token with NULL content\n", 49);
-		return;
+		return ;
 	}
-	
-	if (!*tok) {
+	if (!*tok)
+	{
 		*tok = new_node(content, type, flag);
-		if (!*tok) {
+		if (!*tok)
+		{
 			write(2, "Failed to create token node\n", 28);
 			free(content);
-			return;
+			return ;
 		}
 	}
 	else
 	{
 		aux = new_node(content, type, flag);
-		if (!aux) {
+		if (!aux)
+		{
 			write(2, "Failed to create token node\n", 28);
 			free(content);
-			return;
+			return ;
 		}
 		add_node_back(tok, aux);
 	}

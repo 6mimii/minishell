@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:48:15 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/01 16:24:03 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:57:58 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,9 @@ void	ft_echo(t_msh *msh, t_cmd *cmd, int fd)
 	n_flag = 0;
 	if (!cmd)
 		return ;
-	while (cmd->argv[i] && !(ft_strncmp(cmd->argv[i], "-n", 2)))
-	{
-		if (get_flag(cmd, &i, &j) == 1)
-			n_flag = 1;
-		else if (get_flag(cmd, &i, &j) == 0)
-			break ;
-		i++;
-	}
+	while (cmd->argv[i] && !(ft_strncmp(cmd->argv[i], "-n", 2)) && get_flag(cmd,
+			&i, &j) == 1)
+		n_flag = 1, i++;
 	while (cmd->argv[i])
 	{
 		ft_putstr_fd(cmd->argv[i++], fd);

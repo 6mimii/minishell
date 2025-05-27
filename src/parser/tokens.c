@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 15:19:43 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/05/25 22:57:54 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/27 17:40:27 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	set_double_quote_token(char *line, int *i, t_token **tokens, t_msh *msh)
+void	set_double_quote_token(char *line, int *i, t_token **tokens)
 {
 	int	start;
 	int	flag;
@@ -24,24 +24,24 @@ void	set_double_quote_token(char *line, int *i, t_token **tokens, t_msh *msh)
 		if (*i > 0 && line[*i - 1] != ' ')
 			flag = 1;
 		(*i)++;
-		
-		while (line[*i] && line[*i] != '\"')
+		while (line[*i] && line[*i] != '"')
 			*i += 1;
-		
-		if (line[*i] == '\"')
+		if (line[*i] == '"')
 		{
-			create_token_lst(tokens, T_DQ, ft_substr(line, start, (*i - start)), flag);
+			create_token_lst(tokens, T_DQ, ft_substr(line, start,
+					(*i - start)), flag);
 			*i += 1;
 		}
 		else
 		{
-			error_msh(WRONG_DQ, msh, 2);
-			msh->parse_error = 1;
+			create_token_lst(tokens, T_DQ, ft_substr(line, start,
+					ft_strlen(line) - start), flag);
+			*i = ft_strlen(line);
 		}
 	}
 }
 
-void	set_quote_token(char *line, int *i, t_token **tokens, t_msh *msh)
+void	set_quote_token(char *line, int *i, t_token **tokens)
 {
 	int	start;
 	int	flag;
@@ -63,8 +63,9 @@ void	set_quote_token(char *line, int *i, t_token **tokens, t_msh *msh)
 		}
 		else
 		{
-			error_msh(WRONG_Q, msh, 2);
-			msh->parse_error = 1;
+			create_token_lst(tokens, T_Q, ft_substr(line, start, ft_strlen(line)
+					- start), flag);
+			*i = ft_strlen(line);
 		}
 	}
 }

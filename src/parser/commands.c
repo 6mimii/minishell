@@ -6,24 +6,23 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 15:39:35 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/23 18:44:06 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:18:51 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int is_logical_operator(t_token *token)
+int	is_logical_operator(t_token *token)
 {
-    if (!token || !token->content)
-        return 0;
-    
-    if (ft_strcmp(token->content, "&&") == 0)
-        return 1;
-    
-    return 0;
+	if (!token || !token->content)
+		return (0);
+	if (ft_strcmp(token->content, "&&") == 0)
+		return (1);
+	return (0);
 }
 
-static void process_token(t_token **tok, t_cmd *new, t_msh *msh) {
+static void	process_token(t_token **tok, t_cmd *new, t_msh *msh)
+{
 	if ((*tok)->type == T_G)
 		set_outfile(tok, new, msh);
 	else if ((*tok)->type == T_DG)
@@ -36,11 +35,13 @@ static void process_token(t_token **tok, t_cmd *new, t_msh *msh) {
 		*tok = (*tok)->next;
 }
 
-static void set_fd(t_token **tok, t_cmd *new, t_msh *msh) {
-	while (*tok && (*tok)->type != T_PIPE && !is_logical_operator(*tok)) {
+static void	set_fd(t_token **tok, t_cmd *new, t_msh *msh)
+{
+	while (*tok && (*tok)->type != T_PIPE && !is_logical_operator(*tok))
+	{
 		process_token(tok, new, msh);
 		if (new->error)
-			break;
+			break ;
 	}
 }
 
@@ -59,7 +60,7 @@ int	get_command_len(t_token *token)
 			if (aux->next)
 				aux = aux->next;
 			else
-				break;
+				break ;
 		}
 		else
 		{
@@ -68,47 +69,52 @@ int	get_command_len(t_token *token)
 		if (aux)
 			aux = aux->next;
 		else
-			break;
+			break ;
 	}
 	return (len);
 }
 
-static void finalize_command(t_msh *msh, t_cmd *new_command, t_token **tokens) {
+void	finalize_command(t_msh *msh, t_cmd *new_command, t_token **tokens)
+{
 	set_fd(tokens, new_command, msh);
 	msh->cmd_len += 1;
 	create_command_list(&msh->cmd, new_command);
-	while (*tokens && (*tokens)->type != T_PIPE && !is_logical_operator(*tokens)) {
+	while (*tokens && (*tokens)->type != T_PIPE
+		&& !is_logical_operator(*tokens))
+	{
 		*tokens = (*tokens)->next;
 	}
 }
 
-static void set_cmd(t_msh *msh, t_token **tokens) {
-	t_cmd *new_command;
-	int len;
+static void	set_cmd(t_msh *msh, t_token **tokens)
+{
+	t_cmd	*new_command;
+	int		len;
 
 	if (!tokens || !*tokens)
-		return;
-
+		return ;
 	len = get_command_len(*tokens);
 	new_command = new_node_command();
 	if (!new_command)
-		return;
-
+		return ;
 	new_command->argv = (char **)malloc(sizeof(char *) * (len + 1));
-	if (!new_command->argv) {
+	if (!new_command->argv)
+	{
 		free(new_command);
-		return;
+		return ;
 	}
-
-	if (len > 0) {
-		if (command_content(new_command, *tokens) == 0) {
+	if (len > 0)
+	{
+		if (command_content(new_command, *tokens) == 0)
+		{
 			error_msh(MLLC_ERR, msh, 2);
 			new_command->error = 1;
 		}
-	} else {
+	}
+	else
+	{
 		new_command->argv[0] = NULL;
 	}
-
 	finalize_command(msh, new_command, tokens);
 }
 

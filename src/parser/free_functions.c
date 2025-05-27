@@ -3,31 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mimi-notebook <mimi-notebook@student.42    +#+  +:+       +#+        */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:47:18 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/25 22:57:54 by mimi-notebo      ###   ########.fr       */
+/*   Updated: 2025/05/27 17:34:29 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	free_tokens(t_token **tokens)
-{
-	t_token	*aux;
-
-	if (!tokens || !*tokens)
-		return ;
-	while (*tokens)
-	{
-		aux = (*tokens)->next;
-		if ((*tokens)->content)
-			free((*tokens)->content);
-		free(*tokens);
-		*tokens = aux;
-	}
-	*tokens = NULL;
-}
 
 void	free_matrix(char **matrix)
 {
@@ -40,75 +23,34 @@ void	free_matrix(char **matrix)
 	matrix = NULL;
 }
 
-void free_commands_helper(t_cmd **cmd, t_cmd *aux) {
-    if ((*cmd)->fd_in > 2) {
-        if (access(".here_doc.tmp", F_OK) == 0)
-            unlink(".here_doc.tmp");
-        close((*cmd)->fd_in);
-    }
-    if ((*cmd)->fd_out > 2)
-        close((*cmd)->fd_out);
-    free_matrix((*cmd)->argv);
-    free(*cmd);
-    *cmd = aux;
-}
-
-void free_commands(t_cmd **cmd) {
-    t_cmd *aux;
-
-    if (!cmd || !*cmd)
-        return;
-    while (*cmd) {
-        aux = (*cmd)->next;
-        free_commands_helper(cmd, aux);
-    }
-    *cmd = NULL;
-}
-
-void	free_msh(t_msh *msh)
+void	free_commands_helper(t_cmd **cmd, t_cmd *aux)
 {
-	int i;
-	
-	if (msh->tokens)
-		free_tokens(&msh->tokens);
-	if (msh->cmd)
-		free_commands(&msh->cmd);
-	if (msh->input)
+	if ((*cmd)->fd_in > 2)
 	{
-		free(msh->input);
-		msh->input = NULL;
+		if (access(".here_doc.tmp", F_OK) == 0)
+			unlink(".here_doc.tmp");
+		close((*cmd)->fd_in);
 	}
-	if (msh->path)
-	{
-		free_matrix(msh->path);
-		msh->path = NULL;
-	}
-	
-	if (msh->unset_vars)
-	{
-		i = 0;
-		while (msh->unset_vars[i])
-			free(msh->unset_vars[i++]);
-		free(msh->unset_vars);
-		msh->unset_vars = NULL;
-	}
-	
-	msh->cmd_len = 0;
-	msh->parse_error = 0;
+	if ((*cmd)->fd_out > 2)
+		close((*cmd)->fd_out);
+	free_matrix((*cmd)->argv);
+	free(*cmd);
+	*cmd = aux;
 }
 
-void	free_env(t_env *env)
+void	free_commands(t_cmd **cmd)
 {
-	t_env	*aux;
+	t_cmd	*aux;
 
-	if (!env)
+	if (!cmd || !*cmd)
 		return ;
-	while (env)
+	while (*cmd)
 	{
-		aux = env->next;
-		free(env->type);
-		free(env->content);
-		free(env);
-		env = aux;
+		aux = (*cmd)->next;
+		free_commands_helper(cmd, aux);
 	}
+	*cmd = NULL;
 }
+
+
+
