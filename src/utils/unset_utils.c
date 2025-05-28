@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:43:54 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/27 17:47:04 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:11:36 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,6 @@ char	**create_envp_array(t_msh *msh)
 	return (new_envp);
 }
 
-int	update_envp_array(t_msh *msh)
-{
-	char	**new_envp;
-
-	new_envp = create_envp_array(msh);
-	if (!new_envp)
-		return (0);
-	msh->envp = new_envp;
-	return (1);
-}
-
 int	get_unset_vars_length(t_msh *msh, char *var)
 {
 	int	i;
@@ -80,28 +69,6 @@ char	**create_new_unset_list(t_msh *msh, char *var, int len)
 	new_list[len] = ft_strdup(var);
 	new_list[len + 1] = NULL;
 	return (new_list);
-}
-
-void	add_to_unset_list(t_msh *msh, char *var)
-{
-	int		len;
-	char	**new_list;
-	int		i;
-
-	len = get_unset_vars_length(msh, var);
-	if (len == -1)
-		return ;
-	new_list = create_new_unset_list(msh, var, len);
-	if (!new_list)
-		return ;
-	if (msh->unset_vars)
-	{
-		i = 0;
-		while (msh->unset_vars[i])
-			free(msh->unset_vars[i++]);
-		free(msh->unset_vars);
-	}
-	msh->unset_vars = new_list;
 }
 
 

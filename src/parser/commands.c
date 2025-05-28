@@ -1,22 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   commands.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/13 15:39:35 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/27 16:18:51 by mdoudi-b         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../minishell.h"
 
 int	is_logical_operator(t_token *token)
 {
-	if (!token || !token->content)
+	if (!token)
 		return (0);
-	if (ft_strcmp(token->content, "&&") == 0)
+	if (token->type == T_AND || token->type == T_OR)
 		return (1);
 	return (0);
 }
@@ -86,26 +74,28 @@ void	finalize_command(t_msh *msh, t_cmd *new_command, t_token **tokens)
 	}
 }
 
-static void	set_cmd(t_msh *msh, t_token **tokens)
+static t_cmd	*create_new_command(int len)
 {
 	t_cmd	*new_command;
-	int		len;
 
-	if (!tokens || !*tokens)
-		return ;
-	len = get_command_len(*tokens);
 	new_command = new_node_command();
 	if (!new_command)
-		return ;
+		return (NULL);
 	new_command->argv = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!new_command->argv)
 	{
 		free(new_command);
-		return ;
+		return (NULL);
 	}
+	return (new_command);
+}
+
+static void	populate_command_content(t_cmd *new_command, t_token *tokens, 
+	t_msh *msh, int len)
+{
 	if (len > 0)
 	{
-		if (command_content(new_command, *tokens) == 0)
+		if (command_content(new_command, tokens) == 0)
 		{
 			error_msh(MLLC_ERR, msh, 2);
 			new_command->error = 1;
@@ -115,6 +105,20 @@ static void	set_cmd(t_msh *msh, t_token **tokens)
 	{
 		new_command->argv[0] = NULL;
 	}
+}
+
+static void	set_cmd(t_msh *msh, t_token **tokens)
+{
+	t_cmd	*new_command;
+	int		len;
+
+	if (!tokens || !*tokens)
+		return ;
+	len = get_command_len(*tokens);
+	new_command = create_new_command(len);
+	if (!new_command)
+		return ;
+	populate_command_content(new_command, *tokens, msh, len);
 	finalize_command(msh, new_command, tokens);
 }
 
@@ -128,6 +132,10 @@ void	get_command(t_msh *msh)
 		if (tmp->type != T_PIPE && !is_logical_operator(tmp))
 		{
 			set_cmd(msh, &tmp);
+		}
+		else if (is_logical_operator(tmp))
+		{
+			tmp = tmp->next; // Skip logical operator
 		}
 		else
 		{

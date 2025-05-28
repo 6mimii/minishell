@@ -1,36 +1,18 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   single_cmd.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   */
-/*   Created: 2025/03/07 12:46:20 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/18 19:13:32 by mdoudi-b         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../minishell.h"
 
-char	*find_cmd(char **path, char *cmd, t_msh *msh)
+static int	is_absolute_or_relative_path(char *cmd)
+{
+	return (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') || (cmd[0] == '.'
+			&& cmd[1] == '.' && cmd[2] == '/'));
+}
+
+static char	*search_in_path(char **path, char *cmd)
 {
 	int		i;
 	char	*cmd_joined;
 	char	*aux;
 
 	i = 0;
-	(void)msh;
-	if (!cmd || cmd[0] == '\0')
-		return (NULL);
-	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') || (cmd[0] == '.'
-			&& cmd[1] == '.' && cmd[2] == '/'))
-	{
-		if (access(cmd, F_OK | X_OK) == 0)
-			return (ft_strdup(cmd));
-		return (NULL);
-	}
-	if (!path)
-		return (NULL);
 	while (path && path[i])
 	{
 		aux = ft_strjoin(path[i], "/");
@@ -45,6 +27,22 @@ char	*find_cmd(char **path, char *cmd, t_msh *msh)
 		i++;
 	}
 	return (NULL);
+}
+
+char	*find_cmd(char **path, char *cmd, t_msh *msh)
+{
+	(void)msh;
+	if (!cmd || cmd[0] == '\0')
+		return (NULL);
+	if (is_absolute_or_relative_path(cmd))
+	{
+		if (access(cmd, F_OK | X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
+	if (!path)
+		return (NULL);
+	return (search_in_path(path, cmd));
 }
 
 static void	execute_command(t_msh *msh, t_cmd *cmd, char *full_path)

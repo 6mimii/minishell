@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 15:30:19 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/27 17:49:41 by mdoudi-b         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "Libft/libft.h"
@@ -57,6 +45,8 @@ typedef enum e_token_type
 	T_DL,
 	T_Q,
 	T_DQ,
+	T_AND,
+	T_OR,
 }					t_token_type;
 
 typedef struct s_token
@@ -86,6 +76,7 @@ typedef struct s_msh
 	int				state;
 	char			*input;
 	char			**envp;
+	char			**original_envp;
 	char			**path;
 	int				parse_error;
 	struct s_cmd	*cmd;

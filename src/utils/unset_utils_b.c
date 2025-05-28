@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:45:59 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/27 17:46:51 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:11:36 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,21 @@ void	process_unset_args(t_msh *msh, t_cmd *cmd, int *changed)
 
 void	cleanup_envp_array(char **array, int count)
 {
-	while (--count >= 0)
-		free(array[count]);
+	int	i;
+
+	if (!array)
+		return ;
+	if (count == -1)
+	{
+		i = 0;
+		while (array[i])
+			free(array[i++]);
+	}
+	else
+	{
+		while (--count >= 0)
+			free(array[count]);
+	}
 	free(array);
 }
 

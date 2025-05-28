@@ -43,6 +43,7 @@ src/utils/command_utils_b.c \
 src/utils/command_utils.c \
 src/utils/unset_utils.c \
 src/utils/unset_utils_b.c \
+src/utils/unset_utils_c.c \
 
 CC = clang
 CFLAGS = -g -Wall -Werror -Wextra

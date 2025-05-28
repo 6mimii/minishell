@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 12:48:38 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/27 16:28:10 by mdoudi-b         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../minishell.h"
 
 static bool	all_nbr(char *line)
@@ -37,8 +25,8 @@ static bool	all_nbr(char *line)
 
 void	free_and_exit_ex(t_msh *msh)
 {
-	free_msh(msh);
 	free_env(msh->env);
+	free_msh(msh);
 }
 
 static bool	ft_atolli(const char *str, long long int *result)

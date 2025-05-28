@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 15:30:47 by fsaffiri          #+#    #+#             */
-/*   Updated: 2025/05/27 17:35:24 by mdoudi-b         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
 static int	clean_tokens(t_msh *msh)
@@ -44,15 +32,18 @@ static void	reset_msh_for_next_command(t_msh *msh)
 	char	**unset_vars;
 	t_env	*env;
 	char	**envp;
+	char	**original_envp;
 	int		state;
 
 	unset_vars = msh->unset_vars;
 	env = msh->env;
 	envp = msh->envp;
+	original_envp = msh->original_envp;
 	state = msh->state;
 	free_msh_temporaries(msh);
 	msh->env = env;
 	msh->envp = envp;
+	msh->original_envp = original_envp;
 	msh->unset_vars = unset_vars;
 	msh->cmd_len = 0;
 	msh->parse_error = 0;
@@ -66,6 +57,7 @@ void	init_msh(char **envp, t_msh *msh)
 {
 	msh->env = create_env_lst(envp);
 	msh->envp = envp;
+	msh->original_envp = envp;
 	msh->cmd_len = 0;
 	msh->parse_error = 0;
 	msh->state = 0;
