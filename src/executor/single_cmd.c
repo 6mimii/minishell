@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   single_cmd.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 14:55:16 by mdoudi-b          #+#    #+#             */
+/*   Updated: 2025/05/29 15:29:10 by mdoudi-b         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 static int	is_absolute_or_relative_path(char *cmd)
@@ -75,42 +87,4 @@ void	run_external_command(t_msh *msh, t_cmd *cmd, char **paths)
 		free_and_exit("", msh, 127, false);
 	}
 	execute_command(msh, cmd, full_path);
-}
-
-static void	setup_child_redirections(t_msh *msh)
-{
-	if (msh->cmd->fd_in != STDIN_FILENO)
-	{
-		dup2(msh->cmd->fd_in, STDIN_FILENO);
-		close(msh->cmd->fd_in);
-	}
-	if (msh->cmd->fd_out != STDOUT_FILENO)
-	{
-		dup2(msh->cmd->fd_out, STDOUT_FILENO);
-		close(msh->cmd->fd_out);
-	}
-}
-
-void	handle_single_command(t_msh *msh)
-{
-	pid_t	pid;
-
-	if (!msh || !msh->cmd || msh->cmd->error)
-		return ;
-	if (!msh->cmd->argv || !msh->cmd->argv[0])
-		return ;
-	if (is_builtin(msh, msh->cmd) == 0)
-	{
-		msh->state = 0;
-		return ;
-	}
-	pid = fork();
-	if (pid < 0)
-		error_msh("Error creating pid", msh, 0);
-	if (pid == 0)
-	{
-		setup_child_redirections(msh);
-		run_external_command(msh, msh->cmd, msh->path);
-	}
-	wait_handler(msh, pid);
 }

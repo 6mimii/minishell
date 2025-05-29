@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 14:55:29 by mdoudi-b          #+#    #+#             */
+/*   Updated: 2025/05/29 15:26:56 by mdoudi-b         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-static bool	all_nbr(char *line)
+bool	all_nbr(char *line)
 {
 	int	i;
 	int	check;
@@ -67,7 +79,7 @@ static void	handle_exit_error(t_msh *msh, t_cmd *cmd)
 	exit(2);
 }
 
-static void	exit_extra_options(t_msh *msh, t_cmd *cmd)
+void	exit_extra_options(t_msh *msh, t_cmd *cmd)
 {
 	long long int	value;
 
@@ -82,20 +94,4 @@ static void	exit_extra_options(t_msh *msh, t_cmd *cmd)
 		}
 	}
 	handle_exit_error(msh, cmd);
-}
-
-void	ft_exit(t_msh *msh, t_cmd *cmd)
-{
-	if (!cmd->argv[1])
-	{
-		free_and_exit_ex(msh);
-		exit(0);
-	}
-	if (cmd->argv[2] && all_nbr(cmd->argv[1]) == true)
-	{
-		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		msh->state = 1;
-		return ;
-	}
-	exit_extra_options(msh, cmd);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 14:55:24 by mdoudi-b          #+#    #+#             */
+/*   Updated: 2025/05/29 15:27:02 by mdoudi-b         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 static void	new_var_value(t_msh *msh, char *str)
@@ -48,7 +60,7 @@ static void	add_var_value(t_msh *msh, char *str)
 	return (free(var), free(content), free(new_content));
 }
 
-static void	add_vars(t_msh *msh, char *str)
+void	add_vars(t_msh *msh, char *str)
 {
 	int	i;
 
@@ -74,7 +86,7 @@ static int	validate_export_char(char c)
 	return (ft_isalnum(c) || c == '_');
 }
 
-static int	parse_export(t_msh *msh, char *line)
+int	parse_export(t_msh *msh, char *line)
 {
 	int	i;
 
@@ -94,29 +106,4 @@ static int	parse_export(t_msh *msh, char *line)
 		i++;
 	}
 	return (1);
-}
-
-static void	process_export_arg(t_msh *msh, char *arg)
-{
-	if (ft_strchr(arg, '='))
-		add_vars(msh, arg);
-	else if (!get_env_type(msh, arg))
-		add_env(msh, arg, NULL);
-}
-
-void	ft_export(t_msh *msh, t_cmd *cmd)
-{
-	int	i;
-
-	if (!cmd->argv[1])
-		return (print_export(msh->env, cmd->fd_out));
-	i = 1;
-	while (cmd->argv[i])
-	{
-		if (!parse_export(msh, cmd->argv[i]))
-			msh->state = 1;
-		else
-			process_export_arg(msh, cmd->argv[i]);
-		i++;
-	}
 }

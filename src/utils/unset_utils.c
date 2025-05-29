@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:43:54 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/28 20:11:36 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:42:49 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,13 @@ char	**create_new_unset_list(t_msh *msh, char *var, int len)
 	new_list = (char **)malloc(sizeof(char *) * (len + 2));
 	if (!new_list)
 		return (NULL);
-	for (i = 0; i < len; i++)
+	i = 0;
+	while (i < len)
+	{
 		new_list[i] = ft_strdup(msh->unset_vars[i]);
+		i++;
+	}
 	new_list[len] = ft_strdup(var);
 	new_list[len + 1] = NULL;
 	return (new_list);
 }
-
-

@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:21:28 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/27 16:20:52 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:12:46 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,25 +55,15 @@ void	create_token_lst(t_token **tok, int type, char *content, int flag)
 		write(2, "Warning: Trying to create token with NULL content\n", 49);
 		return ;
 	}
+	aux = new_node(content, type, flag);
+	if (!aux)
+	{
+		write(2, "Failed to create token node\n", 28);
+		free(content);
+		return ;
+	}
 	if (!*tok)
-	{
-		*tok = new_node(content, type, flag);
-		if (!*tok)
-		{
-			write(2, "Failed to create token node\n", 28);
-			free(content);
-			return ;
-		}
-	}
+		*tok = aux;
 	else
-	{
-		aux = new_node(content, type, flag);
-		if (!aux)
-		{
-			write(2, "Failed to create token node\n", 28);
-			free(content);
-			return ;
-		}
 		add_node_back(tok, aux);
-	}
 }

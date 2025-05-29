@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 14:55:37 by mdoudi-b          #+#    #+#             */
+/*   Updated: 2025/05/29 15:24:37 by mdoudi-b         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void	add_env(t_msh *msh, char *var, char *content)
@@ -67,32 +79,10 @@ char	*get_env_type(t_msh *msh, char *var)
 	return (NULL);
 }
 
-static void	print_env_error(char *next, t_msh *msh)
+void	print_env_error(char *next, t_msh *msh)
 {
 	ft_putstr_fd("env: '", 2);
 	ft_putstr_fd(next, 2);
 	ft_putendl_fd("': No such file or directory", 2);
 	msh->state = 127;
-}
-
-void	ft_env(t_msh *msh, t_cmd *cmd, char *next)
-{
-	t_env	*tmp;
-
-	tmp = msh->env;
-	if (!tmp)
-		return ;
-	if (next)
-		return (print_env_error(next, msh));
-	while (tmp)
-	{
-		if (tmp->content)
-		{
-			ft_putstr_fd(tmp->type, cmd->fd_out);
-			ft_putstr_fd("=", cmd->fd_out);
-			ft_putendl_fd(tmp->content, cmd->fd_out);
-		}
-		tmp = tmp->next;
-	}
-	msh->state = 0;
 }

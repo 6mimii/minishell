@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:20:37 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/28 19:12:41 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:46:47 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ void	create_command_list(t_cmd **cmd, t_cmd *new)
 		add_back_command(cmd, new);
 }
 
-
-
 int	process_command_token(t_cmd *new, t_token *aux, int *i)
 {
 	if (aux->content)
@@ -62,4 +60,3 @@ int	process_command_token(t_cmd *new, t_token *aux, int *i)
 	(*i)++;
 	return (1);
 }
-

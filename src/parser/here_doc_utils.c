@@ -6,14 +6,13 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:17:16 by mimi-notebo       #+#    #+#             */
-/*   Updated: 2025/05/27 17:20:16 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:15:28 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 static int	is_limit_reached(char *line, char *limit, int len);
-static char	*process_heredoc_line(char *line, t_msh *msh, int fd);
 
 static void	new_handler(int sig)
 {
@@ -21,18 +20,13 @@ static void	new_handler(int sig)
 		ctrl_c_hd(sig);
 }
 
-static void	handle_ctrl_c(t_msh *msh)
+void	handle_ctrl_c(t_msh *msh)
 {
-	struct sigaction	new_act;
-
-	new_act.sa_handler = &new_handler;
-	new_act.sa_flags = SA_RESTART;
-	sigemptyset(&new_act.sa_mask);
-	if (sigaction(SIGINT, &new_act, NULL) == -1)
-		error_msh("Error: sigaction", msh, 1);
+	signal(SIGINT, new_handler);
+	(void)msh;
 }
 
-static void	wait_hd(t_token *tok, t_cmd *cmd, t_msh *msh, int fd)
+void	wait_hd(t_token *tok, t_cmd *cmd, t_msh *msh, int fd)
 {
 	int	stat;
 
@@ -53,7 +47,7 @@ static void	wait_hd(t_token *tok, t_cmd *cmd, t_msh *msh, int fd)
 	cmd->fd_in = open(".here_doc.tmp", O_RDONLY);
 }
 
-static void	here_doc(char *limit, t_cmd *new, t_msh *msh, int fd)
+void	here_doc(char *limit, t_cmd *new, t_msh *msh, int fd)
 {
 	char	*line;
 	int		len;
@@ -79,52 +73,4 @@ static void	here_doc(char *limit, t_cmd *new, t_msh *msh, int fd)
 static int	is_limit_reached(char *line, char *limit, int len)
 {
 	return (ft_strncmp(line, limit, len) == 0 && !line[len]);
-}
-
-static char	*process_heredoc_line(char *line, t_msh *msh, int fd)
-{
-	line = expand_heredoc(line, msh);
-	if (line)
-	{
-		ft_putendl_fd(line, fd);
-		free(line);
-	}
-	return (line);
-}
-
-static void	setup_heredoc_fd(t_cmd *new, t_msh *msh, int *fd)
-{
-	(void)msh;
-	if (new->fd_in > 2)
-		close(new->fd_in);
-	*fd = open(".here_doc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (*fd == -1)
-	{
-		error_files(".here_doc.tmp", strerror(errno));
-		new->error = 1;
-	}
-}
-
-void	set_heredoc(t_token **tok, t_cmd *new, t_msh *msh)
-{
-	pid_t	pid;
-	int		fd;
-
-	if (!*tok || !(*tok)->next)
-		return (error_msh(UNEXPECTED_EOF, msh, 2), new->error = 1, (void)0);
-	*tok = (*tok)->next;
-	if (new->error == 0)
-	{
-		setup_heredoc_fd(new, msh, &fd);
-		if (new->error == 0)
-		{
-			pid = fork();
-			if (pid == 0)
-				handle_ctrl_c(msh), here_doc((*tok)->content, new, msh, fd);
-			else if (pid > 0)
-				wait_hd(*tok, new, msh, fd);
-		}
-	}
-	if (*tok && (*tok)->next)
-		*tok = (*tok)->next;
 }

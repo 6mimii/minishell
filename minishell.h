@@ -1,5 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 14:58:55 by mdoudi-b          #+#    #+#             */
+/*   Updated: 2025/05/29 15:24:01 by mdoudi-b         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# define _POSIX_C_SOURCE 200809L
 # include "Libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -93,11 +106,11 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
-extern int			g_signal;
-
 void				init_msh(char **envp, t_msh *msh);
 t_env				*enviroment_lst(char **envp);
 void				get_input(t_msh *msh);
+int					clean_tokens(t_msh *msh);
+void				reset_msh_for_next_command(t_msh *msh);
 
 /////////////TOKENIZER//////////////
 t_token				*set_tokens(char *line, t_msh *msh);
@@ -106,7 +119,12 @@ void				set_greather_token(char *line, int *i, t_token **tokens);
 void				set_lower_token(char *line, int *i, t_token **tokens);
 void				set_pipe_token(char *line, int *i, t_token **tokens);
 void				set_quote_token(char *line, int *i, t_token **tokens);
-void				set_double_quote_token(char *line, int *i, t_token **tokens);
+void				set_double_quote_token(char *line, int *i,
+						t_token **tokens);
+void				set_logical_operator_token(char *line, int *i,
+						t_token **tokens);
+int					check_pipes(t_msh *msh, t_token *token, int *flag);
+int					check_tokens(t_token **tokens, t_msh *msh, int flag);
 /////////////UTILS//////////////
 void				classify_token(char *token);
 int					ft_strcmp(char *s1, char *s2);
@@ -145,6 +163,10 @@ void				ctrl_c_hd(int signal);
 char				*exp_line(char *str, t_msh *msh);
 char				*expand_heredoc(char *line, t_msh *msh);
 void				free_and_exit_hd(t_msh *msh, t_cmd *new, int state);
+char				*process_heredoc_line(char *line, t_msh *msh, int fd);
+void				handle_ctrl_c(t_msh *msh);
+void				wait_hd(t_token *tok, t_cmd *cmd, t_msh *msh, int fd);
+void				here_doc(char *limit, t_cmd *new, t_msh *msh, int fd);
 ////////////////EXPAND/////////////////
 char				*no_expand_var(char *s1, int *i);
 void				expand_content(t_token *tok, t_msh *msh);
@@ -156,6 +178,12 @@ int					check_home(const char *str);
 char				*get_word(char *s1, int *i);
 char				*get_exp(char *line, int *i, t_msh *msh);
 char				*expand_var(char *var, t_msh *msh, int len);
+int					is_special_var(char *var);
+char				*handle_special_var(char *var, t_msh *msh);
+char				*process_expand_var(char *var, t_msh *msh, char *line);
+int					is_special_var(char *var);
+char				*handle_special_var(char *var, t_msh *msh);
+char				*process_expand_var(char *var, t_msh *msh, char *line);
 ////////////////FREE/////////////////
 void				free_tokens(t_token **tokens);
 void				free_commands(t_cmd **cmd);
@@ -174,6 +202,7 @@ void				add_env(t_msh *msh, char *var, char *content);
 char				*get_env(t_msh *msh, char *var);
 char				*get_env_type(t_msh *msh, char *var);
 void				print_export(t_env *env, int fd);
+void				print_env_error(char *next, t_msh *msh);
 
 /* Builts in */
 int					is_builtin(t_msh *msh, t_cmd *cmd);
@@ -184,6 +213,10 @@ void				ft_exit(t_msh *msh, t_cmd *cmd);
 void				ft_cd(t_msh *msh, t_cmd *cmd);
 void				ft_export(t_msh *msh, t_cmd *cmd);
 void				ft_unset(t_msh *msh, t_cmd *cmd);
+void				exit_extra_options(t_msh *msh, t_cmd *cmd);
+void				add_vars(t_msh *msh, char *str);
+int					parse_export(t_msh *msh, char *line);
+bool				all_nbr(char *line);
 
 /* One command */
 void				handle_single_command(t_msh *msh);
@@ -220,6 +253,8 @@ void				free_and_exit(char *msg, t_msh *msh, int state, bool print);
 /* Command Utils */
 int					is_logical_operator(t_token *token);
 int					process_command_token(t_cmd *new, t_token *aux, int *i);
-void				finalize_command(t_msh *msh, t_cmd *new_command, t_token **tokens);
+void				finalize_command(t_msh *msh, t_cmd *new_command,
+						t_token **tokens);
+void				process_command_input(t_msh *msh);
 
 #endif

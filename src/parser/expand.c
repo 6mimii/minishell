@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 14:56:18 by mdoudi-b          #+#    #+#             */
+/*   Updated: 2025/05/29 15:16:00 by mdoudi-b         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 static char	*process_expand_content(char *content, int *i, t_msh *msh);
@@ -107,7 +119,6 @@ void	expand_home(t_token *tok, t_msh *msh)
 	tok->content = ft_strdup(line);
 	free(line);
 }
-
 
 void	expand_tokens(t_token **tokens, t_msh *msh)
 {

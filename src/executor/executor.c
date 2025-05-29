@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 14:55:33 by mdoudi-b          #+#    #+#             */
+/*   Updated: 2025/05/29 15:02:17 by mdoudi-b         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-static int handle_builtin_command(t_msh *msh, t_cmd *cmd, char *cmd_name)
+static int	handle_builtin_command(t_msh *msh, t_cmd *cmd, char *cmd_name)
 {
 	if (ft_strcmp(cmd_name, "cd") == 0)
 		return (ft_cd(msh, cmd), 0);

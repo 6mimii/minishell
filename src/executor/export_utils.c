@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 14:55:26 by mdoudi-b          #+#    #+#             */
+/*   Updated: 2025/05/29 15:24:49 by mdoudi-b         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 static int	env_lstsize(t_env *lst)
@@ -64,4 +76,26 @@ void	print_export(t_env *env, int fd)
 		print_var(aux, aux->content, fd);
 		index++;
 	}
+}
+
+void	ft_env(t_msh *msh, t_cmd *cmd, char *next)
+{
+	t_env	*tmp;
+
+	tmp = msh->env;
+	if (!tmp)
+		return ;
+	if (next)
+		return (print_env_error(next, msh));
+	while (tmp)
+	{
+		if (tmp->content)
+		{
+			ft_putstr_fd(tmp->type, cmd->fd_out);
+			ft_putstr_fd("=", cmd->fd_out);
+			ft_putendl_fd(tmp->content, cmd->fd_out);
+		}
+		tmp = tmp->next;
+	}
+	msh->state = 0;
 }

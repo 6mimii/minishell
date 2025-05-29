@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 14:56:30 by mdoudi-b          #+#    #+#             */
+/*   Updated: 2025/05/29 15:41:51 by mdoudi-b         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
-static int	clean_tokens(t_msh *msh)
+int	clean_tokens(t_msh *msh)
 {
 	if (!msh->tokens || msh->parse_error)
 		return (0);
@@ -27,7 +39,7 @@ static void	free_msh_temporaries(t_msh *msh)
 	}
 }
 
-static void	reset_msh_for_next_command(t_msh *msh)
+void	reset_msh_for_next_command(t_msh *msh)
 {
 	char	**unset_vars;
 	t_env	*env;
@@ -65,26 +77,6 @@ void	init_msh(char **envp, t_msh *msh)
 	msh->tokens = NULL;
 	msh->path = NULL;
 	msh->unset_vars = NULL;
-}
-
-static void	process_command_input(t_msh *msh)
-{
-	if (msh->input[0] == '\0')
-		free(msh->input);
-	else
-	{
-		add_history(msh->input);
-		msh->tokens = set_tokens(msh->input, msh);
-		if (msh->parse_error)
-			reset_msh_for_next_command(msh);
-		else if (clean_tokens(msh))
-		{
-			get_command(msh);
-			if (msh->cmd)
-				executor(msh);
-			reset_msh_for_next_command(msh);
-		}
-	}
 }
 
 void	get_input(t_msh *msh)

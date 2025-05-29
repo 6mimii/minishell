@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 18:05:32 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/28 20:11:36 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:06:38 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,8 @@ int	update_envp_array(t_msh *msh)
 		return (0);
 	old_envp = msh->envp;
 	msh->envp = new_envp;
-	
-	// Only free the old envp if it's not the original system envp
 	if (old_envp != msh->original_envp)
 		cleanup_envp_array(old_envp, -1);
-	
 	return (1);
 }
 

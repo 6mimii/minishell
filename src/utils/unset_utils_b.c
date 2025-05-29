@@ -6,22 +6,11 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:45:59 by mdoudi-b          #+#    #+#             */
-/*   Updated: 2025/05/28 20:11:36 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:34:55 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	free_env_node(t_env *env)
-{
-	if (!env)
-		return ;
-	if (env->type)
-		free(env->type);
-	if (env->content)
-		free(env->content);
-	free(env);
-}
 
 void	process_unset_args(t_msh *msh, t_cmd *cmd, int *changed)
 {

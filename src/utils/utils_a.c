@@ -6,7 +6,7 @@
 /*   By: mdoudi-b <mdoudi-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:22:03 by mohamed-dou       #+#    #+#             */
-/*   Updated: 2025/05/28 19:12:41 by mdoudi-b         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:11:37 by mdoudi-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,17 @@ char	*my_strtok(char *str, const char *delim)
 		return (NULL);
 	if (ft_strchr("|><", *next))
 	{
-		token = next;
-		next++;
+		token = next++;
 		return (token);
 	}
 	token = next;
 	while (*next && !ft_strchr(delim, *next) && !ft_strchr("|><", *next))
 		next++;
 	if (*next)
-		*next = '\0', next++;
+	{
+		*next = '\0';
+		next++;
+	}
 	return (token);
 }
 
